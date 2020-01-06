@@ -33,7 +33,6 @@ var server = http.createServer(app);
 const db = require('../Lib/MYSQL');
 const Logger = require('../Components/Logger');
 //const Mailer = require('../Lib/Mailer');
-const GameData = require('../common/GameData');
 
 (async () => {
   try {
@@ -43,13 +42,10 @@ const GameData = require('../common/GameData');
     await db.init();
     Logger.info('DB 초기화 완료');
 
-    await GameData.init();
-    Logger.info('게임데이터 초기화 완료');
-
     // socket io 연결 처리가 필요하면 활성화 한다    
     await ioman.init(server, app.session);
     Logger.info('io 매니져 초기화 완료');
-    sm.init(ioman.io)
+    await sm.init(ioman.io);
     Logger.info('서버 매니져 초기화 완료');    
 
     server.listen(port);

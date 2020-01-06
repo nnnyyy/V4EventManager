@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}\\backend\\bin\\www",
-            "args": ["-dev", "-p", "4000"]
+            "args": ["-dev", "-p", "2500"]
         }
     ]
 }

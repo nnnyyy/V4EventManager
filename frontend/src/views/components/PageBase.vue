@@ -18,5 +18,4 @@
 </script>
 
 <style lang="scss" scoped>
-#PageBase { width: $layout-contents-width; min-height: $layout-contents-height-with-padding; background-color: $cr-ft-1; }
 </style>

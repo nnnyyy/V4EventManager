@@ -20,5 +20,5 @@ export default {
 
 <style lang="scss">
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { position: relative; font-family: $ft-noto-sans-kr; color: $cr-ft-1; background-color: $cr-home-back; }
+  body { position: relative; font-family: $ft-noto-sans-kr; }
 </style>
