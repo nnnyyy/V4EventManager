@@ -1,0 +1,55 @@
+// 컬러
+$cr-primary-1: #004D40;
+$cr-primary-2: #455A64;
+$cr-primary-3: #283593;
+$cr-home-back: #e1e1e1;
+$cr-confirm : #4CAF50;
+$cr-cancel : #F44336;
+$cr-alert: $cr-cancel;
+$cr-ft-1: white;
+$cr-ft-2: $cr-primary-1;
+
+$cr-level-1: #4CAF50;
+$cr-level-2: #CDDC39;
+$cr-level-3: #FFC107;
+$cr-level-4: #FF9800;
+$cr-level-5: #F44336;
+
+@mixin border-radius($radius) {    
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+
+// 공통
+$common-pd-1: 8px;
+
+// 레이아웃 변수
+$layout-top-menu-height: 45px;
+$layout-top-inner-width: 1124px;
+
+$layout-contents-height: calc( 100vh - #{$layout-top-menu-height} );
+$mgt-contents: 8px;
+$layout-contents-height-with-padding: calc( #{$layout-contents-height} - #{$mgt-contents} - 270px );
+
+$layout-leftwnd-width: 130px;
+$layout-rightwnd-width: 160px;
+
+$pdw-contents: 8px;
+$layout-contents-width: calc( #{$layout-top-inner-width} - #{$layout-leftwnd-width} - #{$layout-rightwnd-width} - ( #{$pdw-contents} * 2 ) );
+
+// 폰트
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap');
+$ft-noto-sans-kr: "Noto Sans KR", sans-serif;
+.ft-noto { font-family: $ft-noto-sans-kr; }
+
+
+// 광고 사이즈
+//.ads { background-color: #FF9800; }
+.ads.s728x90 { width: 728px; height: 90px; }
+.ads.s728x250 { width: 728px; height: 250px; }
+.ads.s970x250 { width: 970px; height: 250px; }
+.ads.s320x50 { width: 320px; height: 50px; }
+.ads.s320x100 { width: 320px; height: 100px; }
+.ads.s160x600 { width: 160px; height: 600px; }
