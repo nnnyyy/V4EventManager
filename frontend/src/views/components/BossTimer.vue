@@ -1,6 +1,6 @@
 <template>
     <div>
-        보스 타이머        
+        {{data}}
     </div>
 </template>
 
