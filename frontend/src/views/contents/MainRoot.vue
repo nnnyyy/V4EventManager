@@ -1,8 +1,11 @@
 <template>
-    <div>
-        <div class="v-col" v-for="it in list">
-            <BossTimer :data="it" />
-        </div>
+    <div class="pda-4">
+        <table class="type-1">
+            <BossTimer top=true />
+        <template v-for="(it,idx) in list">
+            <BossTimer :key="idx" :data="it" @onCut="onCut" />
+        </template>
+        </table>
     </div>
 </template>
 
@@ -18,11 +21,38 @@ import BossTimer from '../components/BossTimer';
             }
         },
         created () {
-            this.list.push({group: '데커드 화산', field: '배반자의 소굴', name: '라빌린', cuttime: '2020-01-07 12:00:00', genterm: 3 * 60 * 60 * 1000, type: 0 });            
-            this.list.push({group: '데커드 화산', field: '배반자의 소굴', name: '라빌린', cuttime: '2020-01-07 12:00:00', genterm: 3 * 60 * 60 * 1000, type: 1 });
-            this.list.push({group: '데커드 화산', field: '배반자의 소굴', name: '라빌린', cuttime: '2020-01-07 12:00:00', genterm: 3 * 60 * 60 * 1000, type: 1 });
-            this.list.push({group: '데커드 화산', field: '배반자의 소굴', name: '라빌린', cuttime: '2020-01-07 12:00:00', genterm: 3 * 60 * 60 * 1000, type: 1 });
-            this.list.push({group: '데커드 화산', field: '배반자의 소굴', name: '라빌린', cuttime: '2020-01-07 12:00:00', genterm: 3 * 60 * 60 * 1000, type: 1 });
+            setInterval(this.update, 100);
+            this.loadEvent();            
+        },
+        methods: {
+            update() {
+                this.list.forEach(it=> {
+                    if( it.cuttime == 0 ) it.remain = 0;
+                    else {
+                        it.remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
+                    }
+                })
+            },
+            async loadEvent() {
+                try {
+                    const p = await this.axios.post('/guild/loadBossEvent');
+                    this.list = [];
+                    p.data.list.forEach(it=> {
+                        if( it.cuttime == 0 ) it.remain = 0;
+                        else {
+                            it.remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
+                        }
+                    })
+                    this.$nextTick(()=>{
+                        this.list = p.data.list;
+                    })
+                } catch (e) {
+                    alert(e);
+                }
+            },
+            onCut() {
+                this.loadEvent();                
+            }
         },
     }
 </script>
