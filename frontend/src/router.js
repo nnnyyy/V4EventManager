@@ -12,7 +12,9 @@ export default new Router({
     {
       path: '/', name: 'home',
       component: Home, children: [
-        { path: '', component: Main },
+        { path: '', component: Main, children: [
+          { path: '', name: '', component: ()=> import('./views/contents/MainRoot')}
+        ] },
       ]
     },
     {

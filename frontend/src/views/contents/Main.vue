@@ -1,6 +1,7 @@
 <template>
     <div class="f-col">
         <Top/>
+        <router-view/>
     </div>
 </template>
 

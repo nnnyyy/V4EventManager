@@ -8,3 +8,7 @@ $cr-primary-3: #283593;
 
 $cr-confirm: 'green';
 $cr-cancel: 'red';
+
+// 레이아웃 변수
+$lo-top-height: 100px;
+$lo-bot-height: calc( 100vh - #{$lo-top-height} );

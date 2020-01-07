@@ -8,3 +8,6 @@
 .ads.s320x50 { width: 320px; height: 50px; }
 .ads.s320x100 { width: 320px; height: 100px; }
 .ads.s160x600 { width: 160px; height: 600px; }
+
+// 레이아웃
+#Top { height: $lo-top-height; background-color: $cr-primary-1; }
