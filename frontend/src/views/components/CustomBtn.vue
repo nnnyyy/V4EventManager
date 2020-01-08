@@ -68,7 +68,7 @@ export default {
         this.refresh();        
     },
     updated () {
-        this.refresh();
+        this.refresh(); 
     },
 }
 </script>

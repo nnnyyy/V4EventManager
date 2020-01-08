@@ -8,20 +8,34 @@
             <td>쿨타임(분)</td>
             <td>컷 시간</td>
             <td>예상 젠 시간</td>
-            <td>남은 시간</td>
+            <td class="btn" @click="$emit('align', 'remain')">남은 시간</td>
             <td>컷</td>
         </tr>
         <tr v-else class="boss-timer root">
             <td>{{data.dimention_name}}</td>
-            <td>{{data.area_name}}</td>
-            <td>{{data.field_name}}</td>
+            <td class="btn" @click="onSelectField(data.area_name)">{{data.area_name}}</td>
+            <td class="btn" @click="onSelectField(data.field_name)">{{data.field_name}}</td>
             <td>{{data.boss_name}}</td>
             <td>{{getTypeName(data.type)}}</td>
-            <td>{{cooltime(data.gaptimemin)}}</td>
-            <td>{{cutTime(data.cuttime)}}</td>
-            <td>{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
-            <td>{{getRemainTime(data.remain)}}</td>
-            <td><CustomBtn bg-confirm @listener="onCut">컷</CustomBtn></td>
+            <td style="text-align: center;">
+                <div class="f-row" v-if="modifyCooltime">
+                    <input type="text" v-model="cooltime" placeholder="분 단위" />
+                    <CustomBtn bg_confirm @listener="onModifyCooltime">수정</CustomBtn>                    
+                    <CustomBtn bg_cancel @listener="onCancelModifyCooltime">취소</CustomBtn> 
+                </div>
+                <div v-else class="btn" @click="onMode('modifyCooltime')">{{getCooltime(data.gaptimemin)}}</div>                
+            </td>
+            <td style="text-align: center;">
+                <div class="f-row" v-if="modifyCuttime">
+                    <datetime type="datetime" format="yyyy-MM-dd HH:mm:ss" v-model="cuttime"/>
+                    <CustomBtn bg_confirm @listener="onModifyCutTime">수정</CustomBtn>                    
+                    <CustomBtn bg_cancel @listener="onCancelModifyCutTime">취소</CustomBtn> 
+                </div>
+                <div v-else class="btn" @click="onMode('modifyCuttime')">{{cutTime(data.cuttime)}}</div>
+            </td>
+            <td style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
+            <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
+            <td style="text-align: center;"><CustomBtn bg_confirm @listener="onCut">지금 컷</CustomBtn></td>
         </tr>    
 </template>
 
@@ -30,6 +44,10 @@
         props: ['data', 'top'],
         data() {
             return {
+                modifyCuttime: false,
+                cuttime: '',
+                modifyCooltime: false,
+                cooltime: ''
             }
         },
         created () {
@@ -59,22 +77,72 @@
 
                 return bSameDay ? this.$moment(cuttime).add(gaptimemin, 'minutes').format('HH:mm:ss') : this.$moment(cuttime).add(gaptimemin, 'minutes').format('DD일 HH:mm:ss');
             },
-            cooltime(gaptimemin) {
+            getCooltime(gaptimemin) {
                 if( gaptimemin == 0 ) return '미설정';
                 return gaptimemin;
             },
             getRemainTime(remainSec) {
-                if( remainSec == 0 ) return '정보없음';
+                if( this.data.cuttime == 0 && remainSec == -1 ) return '정보없음';
 
                 const hour = Math.floor(remainSec / 60 / 60);
                 const min = Math.floor(remainSec / 60 % 60);
                 const sec = Math.floor(remainSec % 60);                
 
                 return  ( (hour > 0 ? `${this.G.pad(hour, 2)}:`:``) + `${this.G.pad(min, 2)}:${this.G.pad(sec, 2)}`);
+            },
+            getRemainCls(remainSec) {
+                if( this.data.cuttime == 0 && remainSec == -1 ) return '';
+
+                if( remainSec < 300 ) return 'alert';
+            },
+            onMode(mode) {
+                if( mode == 'modifyCuttime') {
+                    this.modifyCuttime = true;
+                    this.$nextTick(()=> {
+                        this.cuttime = this.$moment(this.data.cuttime).format('YYYY-MM-DDTHH:mm:ssZ');
+                    })                    
+                }
+
+                if( mode == 'modifyCooltime') {
+                    this.modifyCooltime = true;
+                    this.$nextTick(()=> {
+                        this.cooltime = this.data.gaptimemin;
+                    })                    
+                }
+            },
+            async onModifyCutTime() {
+                try {
+                    await this.axios.post('/guild/modifyCutTime', {boss_sn: this.data.sn, modifydate: this.$moment(this.cuttime).format('YYYY-MM-DD HH:mm:ss')});
+                    this.$emit('onCut');
+                } catch (e) {
+                    alert(e);                    
+                } finally {
+                    this.modifyCuttime = false;
+                }
+            },
+            onCancelModifyCutTime() {
+                this.modifyCuttime = false;
+            },
+            async onModifyCooltime() {
+                try {
+                    await this.axios.post('/guild/modifyCooltime', {boss_sn: this.data.sn, cooltime: this.cooltime});
+                    this.$emit('onCooltime');
+                } catch (e) {
+                    alert(e);                    
+                } finally {
+                    this.modifyCooltime = false;
+                }
+            },
+            onCancelModifyCooltime() {
+                this.modifyCooltime = false;
+            },
+            onSelectField(name) {
+                this.$emit('onSelectField', name);
             }
         },
     }
 </script>
 
 <style lang="scss" scoped>
+.boss-timer.root td.alert { background-color: $cr-cancel; color: white; }
 </style>

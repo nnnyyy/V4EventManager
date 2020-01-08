@@ -1,5 +1,5 @@
 <template>  
-<div v-if="show" class="f-base f-jc f-ac" style="position: absolute; left: 0;top:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4);">
+<div v-if="show" @click="onClick($event)" class="f-base f-jc f-ac" style="position: absolute; left: 0;top:0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 100000;">
     <slot></slot>
 </div>  
 </template>
@@ -21,6 +21,10 @@ export default {
         
     },
     methods: {        
+        onClick(e) {
+            e.preventDefault();
+            this.$emit('onClick');
+        }
     },
     created() {        
     }

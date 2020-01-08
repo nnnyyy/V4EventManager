@@ -9,9 +9,11 @@
 .ads.s320x100 { width: 320px; height: 100px; }
 .ads.s160x600 { width: 160px; height: 600px; }
 
+.btn { cursor: pointer; }
+
 // 레이아웃
 #Top { height: $lo-top-height; background-color: $cr-primary-1; }
 
-table.type-1 { border-collapse: collapse; }
+table.type-1 { border-collapse: collapse; width: 100%; }
 table.type-1 .top td { text-align: center; background-color: $cr-primary-1; border: 1.5px solid black; color: white; }
 table.type-1 td { border: 1.5px solid black; @extend .pdh-1; @extend .pdw-4; }

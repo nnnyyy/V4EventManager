@@ -26,6 +26,10 @@ Vue.component('paginate', Paginate);
 
 Vue.use(require('vue-moment'));
 
+import Datetime from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css';
+Vue.use(Datetime);
+
 //import CKEditor from '@ckeditor/ckeditor5-vue';
 //Vue.use( CKEditor );
 
