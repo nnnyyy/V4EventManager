@@ -27,7 +27,7 @@
             </td>
             <td style="text-align: center;">
                 <div class="f-row" v-if="modifyCuttime">
-                    <datetime type="datetime" format="yyyy-MM-dd HH:mm:ss" v-model="cuttime"/>
+                    <vue-timepicker format="HH:mm" v-model="cuttime"></vue-timepicker>
                     <CustomBtn bg_confirm @listener="onModifyCutTime">수정</CustomBtn>                    
                     <CustomBtn bg_cancel @listener="onCancelModifyCutTime">취소</CustomBtn> 
                 </div>
@@ -40,12 +40,21 @@
 </template>
 
 <script>
+import VueTimepicker from 'vue2-timepicker';
+import 'vue2-timepicker/dist/VueTimepicker.css';
+
     export default {
+        components: {
+            VueTimepicker,
+        },
         props: ['data', 'top'],
         data() {
             return {
                 modifyCuttime: false,
-                cuttime: '',
+                cuttime: {
+                    HH: '03',
+                    mm: '05'
+                },
                 modifyCooltime: false,
                 cooltime: ''
             }
@@ -97,9 +106,14 @@
             },
             onMode(mode) {
                 if( mode == 'modifyCuttime') {
+                    if(this.data.cuttime == 0) {
+                        alert('지금 컷을 한번 실행 후 수정해주세요.');
+                        return;
+                    }
                     this.modifyCuttime = true;
                     this.$nextTick(()=> {
-                        this.cuttime = this.$moment(this.data.cuttime).format('YYYY-MM-DDTHH:mm:ssZ');
+                        this.cuttime.HH = this.$moment(this.data.cuttime).format('HH');
+                        this.cuttime.mm = this.$moment(this.data.cuttime).format('mm');
                     })                    
                 }
 
@@ -112,7 +126,14 @@
             },
             async onModifyCutTime() {
                 try {
-                    await this.axios.post('/guild/modifyCutTime', {boss_sn: this.data.sn, modifydate: this.$moment(this.cuttime).format('YYYY-MM-DD HH:mm:ss')});
+                    const yesterday = Number(this.$moment(Date.now()).format('HH')) < Number(this.cuttime.HH);
+                    let now = new Date();
+                    if( yesterday ) now.setDate(now.getDate() - 1);
+
+                    now.setHours(this.cuttime.HH);
+                    now.setMinutes(this.cuttime.mm);
+                    console.log(this.$moment(now).format('YYYY-MM-DD HH:mm'));
+                    await this.axios.post('/guild/modifyCutTime', {boss_sn: this.data.sn, modifydate: this.$moment(now).format('YYYY-MM-DD HH:mm') });
                     this.$emit('onCut');
                 } catch (e) {
                     alert(e);                    
