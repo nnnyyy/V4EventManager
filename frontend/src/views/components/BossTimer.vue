@@ -10,6 +10,7 @@
             <td>예상 젠 시간</td>
             <td class="btn" @click="$emit('align', 'remain')">남은 시간</td>
             <td>컷</td>
+            <td>즐겨찾기</td>
         </tr>
         <tr v-else class="boss-timer root">
             <td>{{data.dimention_name}}</td>
@@ -36,6 +37,7 @@
             <td style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
             <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
             <td style="text-align: center;"><CustomBtn bg_confirm @listener="onCut">지금 컷</CustomBtn></td>
+            <td class="btn" style="text-align: center;" @click="onFavorite" ><i style="color: black;" class="material-icons">{{data.favorite?'star':'star_border'}}</i></td>
         </tr>    
 </template>
 
@@ -118,6 +120,10 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
                 }
 
                 if( mode == 'modifyCooltime') {
+                    if(this.data.cuttime == 0) {
+                        alert('지금 컷을 한번 실행 후 수정해주세요.');
+                        return;
+                    }
                     this.modifyCooltime = true;
                     this.$nextTick(()=> {
                         this.cooltime = this.data.gaptimemin;
@@ -159,6 +165,9 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
             },
             onSelectField(name) {
                 this.$emit('onSelectField', name);
+            },
+            onFavorite() {
+                this.$emit('onFavorite');
             }
         },
     }
