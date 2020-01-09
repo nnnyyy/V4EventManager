@@ -4,8 +4,8 @@
             <div>
                 <img @click="onClickFullSizeImage($event)" :src="fullsizeMapSrc"/>
             </div>
-        </PermanentWnd>        
-        <div class="left pda-4" style="flex: 1 0 1000px;">
+        </PermanentWnd>
+        <div class="left pda-4" style="flex: auto;">
             <div v-show="false" class="f-row f-wrap">
                 <div class="pda-1" style="width: 160px;" v-for="it in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
             </div>
@@ -16,20 +16,16 @@
             </template>
             </table>
         </div>
-        <div class="pda-4" style="flex: 0 0 600px;">
-            <Maps :info="mapinfo" @onFullSizeMap="onFullSizeMap" />
-        </div>
     </div>
 </template>
 
 <script>
 import BossTimer from '../components/BossTimer';
-import Maps from '../components/Maps';
 let mFilterField = new Map();
 let baklist = [];
     export default {
         components: {
-            BossTimer,Maps
+            BossTimer
         },
         data() {
             return {
@@ -101,8 +97,8 @@ let baklist = [];
             onCooltime() {
                 this.loadEvent();
             },
-            onSelectField(fieldname) {
-                this.mapinfo.field = fieldname;
+            onSelectField(mapdata) {
+                this.onFullSizeMap(mapdata.src);
             },
             onAlign(type) {
                 if( this.align == type ) type = '';
@@ -176,5 +172,5 @@ let baklist = [];
 </script>
 
 <style lang="scss" scoped>
-.left { height: calc(#{$lo-bot-height} - 32px); overflow-y: auto; }
+.left { height: calc(#{$lo-bot-height} - 16px); overflow-y: auto; }
 </style>

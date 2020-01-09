@@ -16,4 +16,4 @@
 
 table.type-1 { border-collapse: collapse; width: 100%; }
 table.type-1 .top td { text-align: center; background-color: $cr-primary-1; border: 1.5px solid black; color: white; }
-table.type-1 td { border: 1.5px solid black; @extend .pdh-1; @extend .pdw-4; }
+table.type-1 td { border: 1.5px solid black; @extend .pdh-1; @extend .pdw-4; font-size: 12.5px; }

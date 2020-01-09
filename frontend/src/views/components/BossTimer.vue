@@ -14,23 +14,23 @@
         </tr>
         <tr v-else class="boss-timer root">
             <td>{{data.dimention_name}}</td>
-            <td class="btn" @click="onSelectField(data.area_name)">{{data.area_name}}</td>
-            <td class="btn" @click="onSelectField(data.field_name)">{{data.field_name}}</td>
+            <td >{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
+            <td :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}}</td>
             <td>{{getTypeName(data.type)}}</td>
             <td style="text-align: center;">
                 <div class="f-row" v-if="modifyCooltime">
-                    <input type="text" v-model="cooltime" placeholder="분 단위" />
-                    <CustomBtn bg_confirm @listener="onModifyCooltime">수정</CustomBtn>                    
-                    <CustomBtn bg_cancel @listener="onCancelModifyCooltime">취소</CustomBtn> 
+                    <input type="text" style="width: 50px;" v-model="cooltime" placeholder="분 단위" />
+                    <div class="mgl-1"><CustomBtn bg_confirm @listener="onModifyCooltime">수정</CustomBtn></div>
+                    <div class="mgl-1"><CustomBtn bg_cancel @listener="onCancelModifyCooltime">취소</CustomBtn></div> 
                 </div>
                 <div v-else class="btn" @click="onMode('modifyCooltime')">{{getCooltime(data.gaptimemin)}}</div>                
             </td>
             <td style="text-align: center;">
                 <div class="f-row" v-if="modifyCuttime">
-                    <vue-timepicker format="HH:mm" v-model="cuttime"></vue-timepicker>
-                    <CustomBtn bg_confirm @listener="onModifyCutTime">수정</CustomBtn>                    
-                    <CustomBtn bg_cancel @listener="onCancelModifyCutTime">취소</CustomBtn> 
+                    <div><vue-timepicker input-width="80px" format="HH:mm" v-model="cuttime"></vue-timepicker></div>
+                    <div class="mgl-1"><CustomBtn bg_confirm @listener="onModifyCutTime">수정</CustomBtn></div>
+                    <div class="mgl-1"><CustomBtn bg_cancel @listener="onCancelModifyCutTime">취소</CustomBtn> </div>
                 </div>
                 <div v-else class="btn" @click="onMode('modifyCuttime')">{{cutTime(data.cuttime)}}</div>
             </td>
@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { MapData } from '@/js/MapData';
 import VueTimepicker from 'vue2-timepicker';
 import 'vue2-timepicker/dist/VueTimepicker.css';
 
@@ -106,6 +107,17 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
 
                 if( remainSec < 300 ) return 'alert';
             },
+            hasAreaData() {
+                return !!MapData[this.data.area_name];
+            },
+            hasFieldData() {
+                return !!MapData[this.data.field_name];
+            },
+            getFieldCls() {
+                if( !this.hasFieldData() ) return;
+
+                return "hasImage";
+            },
             onMode(mode) {
                 if( mode == 'modifyCuttime') {
                     if(this.data.cuttime == 0) {
@@ -163,8 +175,11 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
             onCancelModifyCooltime() {
                 this.modifyCooltime = false;
             },
-            onSelectField(name) {
-                this.$emit('onSelectField', name);
+            onSelectField() {                
+                this.$emit('onSelectField', MapData[this.data.field_name]);
+            },
+            onSelectArea() {
+                this.$emit('onSelectField', MapData[this.data.area_name]);
             },
             onFavorite() {
                 this.$emit('onFavorite');
@@ -175,4 +190,5 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
 
 <style lang="scss" scoped>
 .boss-timer.root td.alert { background-color: $cr-cancel; color: white; }
+.boss-timer.root td.hasImage {  }
 </style>
