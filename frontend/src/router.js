@@ -10,11 +10,9 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      component: Home, children: [
-        { path: '', component: Main, children: [
-          { path: '', name: '', component: ()=> import('./views/contents/MainRoot')}
-        ] },
+      path: '/', component: Home, children: [
+        { path: '', name: '', component: ()=> import('./views/contents/MainRoot')},
+        { path: 'AccountManage', name: '', component: ()=> import('./views/contents/AccountManage')}
       ]
     },
     {

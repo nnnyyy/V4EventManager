@@ -1,4 +1,5 @@
 <template>
+<PageBaseGuildMemberOnly>
     <div class="f-row">
         <PermanentWnd :show="fullsizeMap" @onClick="onCloseFullSizeMap">
             <div>
@@ -17,6 +18,7 @@
             </table>
         </div>
     </div>
+</PageBaseGuildMemberOnly>
 </template>
 
 <script>

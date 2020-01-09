@@ -1,19 +1,19 @@
 <template>
-<div>
-  <router-view/>
-</div>
+    <div class="f-col">
+        <Top/>
+        <router-view/>
+    </div>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {       
-      }
-    },
-    components: {      
-    },
-  }
+    import Top from './contents/Top';
+    export default {
+        components: {
+            Top,
+        },        
+    }
 </script>
 
 <style lang="scss" scoped>
+
 </style>

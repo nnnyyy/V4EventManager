@@ -13,6 +13,18 @@ export default {
     return {
     }
   },
+  async beforeCreate () {
+      try {
+          const p = await this.axios.post('/api/auth/check');
+          if(p.data.ret != 0 ) throw p.data.ret;
+
+          this.$store.state.auth = true;
+          this.$store.state.state = 0;
+
+      } catch (e) {
+          alert(e);                
+      }
+  },   
   async created () {    
   },
 }

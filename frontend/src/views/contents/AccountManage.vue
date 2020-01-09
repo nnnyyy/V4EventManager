@@ -1,15 +1,13 @@
 <template>
-    <div class="f-col">
-        <router-view/>
+<PageBaseGuildMasterOnly>
+    <div>
     </div>
+</PageBaseGuildMasterOnly>    
 </template>
 
 <script>
-    
     export default {
-        components: {
-            
-        },        
+        
     }
 </script>
 

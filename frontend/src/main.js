@@ -20,6 +20,10 @@ Vue.component('adfit', VueAdfit);
 
 import PageBase from './views/components/PageBase'
 Vue.component('PageBase', PageBase);
+import PageBaseGuildMasterOnly from './views/components/PageBaseGuildMasterOnly'
+Vue.component('PageBaseGuildMasterOnly', PageBaseGuildMasterOnly);
+import PageBaseGuildMemberOnly from './views/components/PageBaseGuildMemberOnly'
+Vue.component('PageBaseGuildMemberOnly', PageBaseGuildMemberOnly);
 
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate);
