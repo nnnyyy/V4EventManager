@@ -6,3 +6,10 @@ exports.ErrorProc = function(res, e) {
         res.send({ ret: -100 });
     }
 }
+
+exports.GetUserInfo = function(req) {
+    return new Promise((res,rej)=> {
+        if( !req.session.userinfo ) rej(-101);
+        else res(req.session.userinfo);
+    })
+}

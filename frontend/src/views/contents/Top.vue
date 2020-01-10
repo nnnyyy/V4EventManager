@@ -13,13 +13,23 @@
             return {
                 menu: [
                     {name: '로그인', link: 'Login', notauth_only: true },
+                    {name: '간편 가입', link: 'SignUp', notauth_only: true },
                     {name: '보스컷 현황', link: '', auth_required: true },
-                    {name: '길드원 관리', link: 'AccountManage', auth_required: true, master_only: true }
+                    {name: '길드원 관리', link: 'AccountManage', auth_required: true, master_only: true },
+                    {name: '로그아웃', link: 'Logout', auth_required: true },
                 ]
             }
         },
         methods: {
-            onLink(link) {
+            async onLink(link) {
+                if( link == 'Logout' ) {
+                    if(!confirm('로그아웃 하시겠습니까?')) {
+                        return;
+                    }
+                    await this.axios.post('/api/auth/logout');
+                    window.location.href = '/';
+                    return;
+                }
                 window.location.href = '/' + link;
             },
             getCls(link) {
@@ -31,7 +41,7 @@
 
                 if( item.auth_required && this.$store.state.auth ) {
                     if( item.master_only ) {
-                        return  this.$store.state.state === 1;
+                        return  this.$store.state.state === 3;
                     }
                     else return true;
                 }

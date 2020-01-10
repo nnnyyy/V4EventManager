@@ -9,8 +9,8 @@
             <div id="PageBase" class="f-col f-jc f-ac pda-2 mgw-2 border-radius">
                 <div class="fts-title-1">길드에 소속되어야 볼 수 있습니다</div>
                 <div class="f-row f-jc mgt-4">
-                    <div class="btn mbox pda-4 mgw-4">길드마스터 하기</div>
-                    <div class="btn mbox pda-4 mgw-4">길드가입</div>
+                    <div class="btn mbox pda-4 mgw-4" @click="onLink('MakeGuild')">길드마스터 하기</div>
+                    <div class="btn mbox pda-4 mgw-4" @click="onLink('JoinGuild')">길드가입</div>
                 </div>
             </div>
         </template>
@@ -21,7 +21,12 @@
 </template>
 
 <script>
-    export default {             
+    export default {      
+        methods: {
+            onLink(link) {
+                window.location.href = `/${link}`;
+            }
+        },       
     }
 </script>
 

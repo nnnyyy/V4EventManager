@@ -12,7 +12,11 @@ export default new Router({
     {
       path: '/', component: Home, children: [
         { path: '', name: '', component: ()=> import('./views/contents/MainRoot')},
-        { path: 'AccountManage', name: '', component: ()=> import('./views/contents/AccountManage')}
+        { path: 'AccountManage', name: '', component: ()=> import('./views/contents/AccountManage')},
+        { path: 'MakeGuild', name: '', component: ()=> import('./views/contents/MakeGuild')},
+        { path: 'JoinGuild', name: '', component: ()=> import('./views/contents/JoinGuild')},
+        { path: 'Login', name: '', component: ()=> import('./views/contents/Login')},
+        { path: 'SignUp', name: '', component: ()=> import('./views/contents/SignUp')},
       ]
     },
     {

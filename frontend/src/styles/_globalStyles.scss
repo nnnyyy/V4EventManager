@@ -17,3 +17,9 @@
 table.type-1 { border-collapse: collapse; width: 100%; }
 table.type-1 .top td { text-align: center; background-color: $cr-primary-1; border: 1.5px solid black; color: white; }
 table.type-1 td { border: 1.5px solid black; @extend .pdh-1; @extend .pdw-4; font-size: 12.5px; }
+
+table.form-1 { border-collapse: separate; width: 100%; }
+table.form-1 tr > td:not([colspan="2"]):first-child { text-align: center; background-color: $cr-primary-1; color: white; @extend .pdh-1; @extend .pdw-4; }
+table.form-1 tr > td[colspan="2"] { text-align: center; @extend .pdh-1; @extend .pdw-4; }
+table.form-1 tr > td:nth-child(2) { @extend .pdh-1; @extend .pdw-1; }
+table.form-1 td { font-size: 12.5px; }

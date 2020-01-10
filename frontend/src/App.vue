@@ -17,12 +17,18 @@ export default {
       try {
           const p = await this.axios.post('/api/auth/check');
           if(p.data.ret != 0 ) throw p.data.ret;
+          const userinfo = p.data.info;
 
           this.$store.state.auth = true;
-          this.$store.state.state = 0;
+          this.$store.state.state = userinfo.grade;
+          this.$store.state.guild = userinfo.guild;
 
       } catch (e) {
-          alert(e);                
+        if( e == -101 ) {          
+          this.$store.state.auth = false;
+          return;
+        }
+        alert(e);
       }
   },   
   async created () {    

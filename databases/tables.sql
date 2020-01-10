@@ -14,17 +14,26 @@ create table account (
 
 insert into account (nick, pw) values ('왕야옹', password('1234'));
 
+drop table if exists user_guild;
+create table user_guild (
+	user_sn int not null,
+    guild_sn int not null default -1,    
+    grade int not null default 0, /* 0: 미승인, 1: 일반, 2: 입력가능, 3: 마스터 */
+    primary key(user_sn)
+)DEFAULT CHARSET=utf8;
+
+insert into user_guild (user_sn, guild_sn, grade) values (1,1,3);
+
 drop table if exists guild;
 create table guild (
 	sn int auto_increment,
     master_sn int not null,
     guildname varchar(100) not null,
-    entrance_key text,
     regdate datetime not null default now(),
     primary key(sn)
 )DEFAULT CHARSET=utf8;
 
-insert into guild (master_sn, guildname, entrance_key) values ( 1, '야옹야옹', 'TEST4U');
+insert into guild (master_sn, guildname) values ( 1, '야옹야옹');
 
 drop table if exists guildlog;
 create table guildlog (
@@ -53,7 +62,7 @@ insert into boss ( dimention_name, area_name, field_name, boss_name, type ) valu
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '데커스화산', '배반자의 소굴', '라빌린', 1);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '데커스화산', '비명소리 웅덩이', '라파커스', 1);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '달그림자 호수', '바르트', 2);
-insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '별자리 호수', '비아', 2);
+insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고account원', '별자리 호수', '비아', 2);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '빼앗긴 경작지 ', '키벨레', 2);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '서리 폭풍 비탈', '렌티', 1);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '서리 폭풍 비탈', '바르돌', 1);
