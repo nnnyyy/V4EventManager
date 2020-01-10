@@ -39,9 +39,15 @@ let baklist = [];
                 filter_field: []
             }
         },
+        beforeCreate() {
+            this.$EventBus.$on('logined', ()=>{
+                this.loadEvent();
+            })
+        },
         created () {
             setInterval(this.update, 100);
-            if( this.$store.state.auth ) this.loadEvent();            
+        },
+        mounted() {
         },
         methods: {
             update() {

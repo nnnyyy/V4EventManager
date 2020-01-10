@@ -13,7 +13,7 @@ export default {
     return {
     }
   },
-  async beforeCreate () {
+  async created() {
       try {
           const p = await this.axios.post('/api/auth/check');
           if(p.data.ret != 0 ) throw p.data.ret;
@@ -22,6 +22,9 @@ export default {
           this.$store.state.auth = true;
           this.$store.state.state = userinfo.grade;
           this.$store.state.guild = userinfo.guild;
+          setTimeout(()=> {
+            this.$EventBus.$emit('logined');
+          }, 200);
 
       } catch (e) {
         if( e == -101 ) {          
@@ -30,9 +33,7 @@ export default {
         }
         alert(e);
       }
-  },   
-  async created () {    
-  },
+  }
 }
 </script>
 
