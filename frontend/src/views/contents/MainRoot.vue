@@ -59,9 +59,10 @@ let baklist = [];
                         
                         if( it.remain != 0 && remain == 0 ) {
                             const ret = await Notification.requestPermission();
-                            if( ret == 'denied') return;
-                            let noti = new Notification("v4 보스 관리기 알람", {body: `[${it.boss_name}] 보스가 뜰 시간이에요!`});
-                            setTimeout(()=>noti.close(),10000);
+                            if( ret == 'granted') {
+                                let noti = new Notification("v4 보스 관리기 알람", {body: `[${it.boss_name}] 보스가 뜰 시간이에요!`});
+                                setTimeout(()=>noti.close(),10000);
+                            }                            
                         }
                         it.remain = remain;
                     }
