@@ -76,6 +76,7 @@ let baklist = [];
 
                     p.data.list.forEach(it=> {
                         baklist.push(it);
+                        if( it.gaptimemin <= 0 ) it.gaptimemin = it.term;
                         mFilterField.set(it.field_name, {name: it.field_name, check: false});
                         it.favorite = mFavorite.has(it.sn) ? true : false;
                         

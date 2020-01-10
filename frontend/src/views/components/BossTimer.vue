@@ -111,7 +111,7 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
                 return !!MapData[this.data.area_name];
             },
             hasFieldData() {
-                return !!MapData[this.data.field_name];
+                return !!MapData[this.data.field_group];
             },
             getFieldCls() {
                 if( !this.hasFieldData() ) return;
@@ -175,8 +175,8 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
             onCancelModifyCooltime() {
                 this.modifyCooltime = false;
             },
-            onSelectField() {                
-                this.$emit('onSelectField', MapData[this.data.field_name]);
+            onSelectField() {
+                this.$emit('onSelectField', MapData[this.data.field_group]);
             },
             onSelectArea() {
                 this.$emit('onSelectField', MapData[this.data.area_name]);
