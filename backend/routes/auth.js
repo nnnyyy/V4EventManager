@@ -35,7 +35,7 @@ function deleteUserInfo(req) {
 
 exports.check = async (req,res)=> {
     try {
-        const userinfo = await GetUserInfo(req);
+        const userinfo = await GetUserInfo(req);        
 
         res.send({ret: 0, info: userinfo});
     } catch (e) {

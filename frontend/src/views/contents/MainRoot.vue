@@ -96,7 +96,7 @@ let baklist = [];
                         this.onAlign(this.align);
                     })
                 } catch (e) {
-                    if( e == -1 || e == -2 ) return;
+                    if( e == -1 || e == -2 || e == -101 ) return;
                     alert(e);
                 }
             },

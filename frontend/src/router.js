@@ -16,6 +16,7 @@ export default new Router({
         { path: 'JoinGuild', name: '', component: ()=> import('./views/contents/JoinGuild')},
         { path: 'Login', name: '', component: ()=> import('./views/contents/Login')},
         { path: 'SignUp', name: '', component: ()=> import('./views/contents/SignUp')},
+        { path: 'GuildLog', name: '', component: ()=> import('./views/contents/GuildLog')},
       ]
     },
     {

@@ -15,6 +15,7 @@
                     {name: '로그인', link: 'Login', notauth_only: true },
                     {name: '간편 가입', link: 'SignUp', notauth_only: true },
                     {name: '보스컷 현황', link: '', auth_required: true },
+                    {name: '길드 로그', link: 'GuildLog', auth_required: true },
                     {name: '길드원 관리', link: 'AccountManage', auth_required: true, master_only: true },
                     {name: '로그아웃', link: 'Logout', auth_required: true },
                 ]

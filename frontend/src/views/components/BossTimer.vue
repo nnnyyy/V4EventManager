@@ -32,7 +32,7 @@
                     <div class="mgl-1"><CustomBtn bg_confirm @listener="onModifyCutTime">수정</CustomBtn></div>
                     <div class="mgl-1"><CustomBtn bg_cancel @listener="onCancelModifyCutTime">취소</CustomBtn> </div>
                 </div>
-                <div v-else class="btn" @click="onMode('modifyCuttime')">{{cutTime(data.cuttime)}}</div>
+                <div v-else>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i></div>
             </td>
             <td style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
             <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
@@ -77,6 +77,13 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
             },
             async onCut() {
                 try {
+                    if( this.$store.state.state < 2 ) {
+                        alert('권한이 없습니다. 길드마스터에게 문의하세요.');
+                        return;
+                    }
+
+                    if( !confirm('현재 시간으로 컷을 입력하시겠습니까? 입력 후 수정 가능합니다.') ) return;
+
                     await this.axios.post('/guild/cut', {boss_sn: this.data.sn});
                     this.$emit('onCut');
                 } catch (e) {
@@ -123,6 +130,11 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
                 return "type-1";
             },
             onMode(mode) {
+                if( this.$store.state.state < 2 ) {
+                    alert('권한이 없습니다. 길드마스터에게 문의하세요.');
+                    return;
+                }
+
                 if( mode == 'modifyCuttime') {
                     if(this.data.cuttime == 0) {
                         alert('지금 컷을 한번 실행 후 수정해주세요.');
@@ -168,6 +180,10 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
             },
             async onModifyCooltime() {
                 try {
+                    if( this.$store.state.state < 2 ) {
+                        alert('수정 권한이 없습니다');
+                        return;
+                    }
                     await this.axios.post('/guild/modifyCooltime', {boss_sn: this.data.sn, cooltime: this.cooltime});
                     this.$emit('onCooltime');
                 } catch (e) {

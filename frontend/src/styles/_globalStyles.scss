@@ -26,3 +26,7 @@ table.form-1 tr > td:not([colspan="2"]):first-child { text-align: center; backgr
 table.form-1 tr > td[colspan="2"] { text-align: center; @extend .pdh-1; @extend .pdw-4; }
 table.form-1 tr > td:nth-child(2) { @extend .pdh-1; @extend .pdw-1; }
 table.form-1 td { font-size: 12.5px; }
+
+.pagination { list-style: none; display: flex; justify-content: center; }
+.pagination li { padding: 15px 15px; font-size: 12pt; }
+.pagination li.active { color: $cr-confirm; }

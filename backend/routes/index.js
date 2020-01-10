@@ -23,3 +23,4 @@ router.post('/guild/checkUserGuildState', guild.checkUserGuildState);
 router.post('/guild/loadGuildMembers', guild.loadGuildMembers);
 router.post('/guild/changeGrade', guild.changeGrade);
 router.post('/guild/kickUser', guild.kickUser);
+router.post('/guild/loadLogs', guild.loadLogs);

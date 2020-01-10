@@ -3,6 +3,7 @@ const db = require('../Lib/MYSQL');
 const Logger = require('../Components/Logger');
 const ErrorProc = require('./commonFunc').ErrorProc;
 const GetUserInfo = require('./commonFunc').GetUserInfo;
+const moment = require('moment');
 
 function saveUserInfo(req, userinfo) {
     return new Promise(async (res,rej)=> {
@@ -53,7 +54,9 @@ exports.cut = async (req,res)=> {
         const sn = req.body.boss_sn;
         const userinfo = await GetUserInfo(req);
         const guildSN = userinfo.guild;
-        const userSN = 1;
+        const userSN = userinfo.sn;
+
+        if( userinfo.grade < 2 ) throw -1;
 
         const boss = await db.query(`select * from boss where sn = ${sn}`);
         const bossinfo = boss.rows[0];
@@ -66,7 +69,7 @@ exports.cut = async (req,res)=> {
             await db.query(`update cuttime set cuttime = now() where guild_sn = ${guildSN} and boss_sn = ${sn}`);
         }
 
-        await _WriteGuildLog(guildSN, userSN, `${bossinfo.boss_name} 컷 입력`);
+        await _WriteGuildLog(guildSN, userSN, `${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷을 입력 했습니다`);
 
         res.send({ret: 0});
         
@@ -83,12 +86,14 @@ exports.modifyCooltime = async (req, res)=> {
         const userSN = userinfo.sn;
         const cooltime = req.body.cooltime;
 
+        if( userinfo.grade < 2 ) throw -1;
+
         const boss = await db.query(`select * from boss where sn = ${sn}`);
         const bossinfo = boss.rows[0];
 
         await db.query(`update cuttime set gaptimemin = ${cooltime} where guild_sn = ${guildSN} and boss_sn = ${sn}`);
 
-        await _WriteGuildLog(guildSN, userSN, `${bossinfo.boss_name} 쿨타임 수정`);
+        await _WriteGuildLog(guildSN, userSN, `${bossinfo.boss_name} 쿨타임을 ${cooltime}로 수정 했습니다`);
 
         res.send({ret: 0});
     } catch (e) {
@@ -104,12 +109,14 @@ exports.modifyCutTime = async (req, res)=> {
         const userSN = userinfo.sn;
         const modifydate = req.body.modifydate;
 
+        if( userinfo.grade < 2 ) throw -1;
+
         const boss = await db.query(`select * from boss where sn = ${sn}`);
         const bossinfo = boss.rows[0];
 
         await db.query(`update cuttime set cuttime = '${modifydate}' where guild_sn = ${guildSN} and boss_sn = ${sn}`);
 
-        await _WriteGuildLog(guildSN, userSN, `${bossinfo.boss_name} 컷 수정`);
+        await _WriteGuildLog(guildSN, userSN, `${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷 시간을 ${moment(modifydate).format('YYYY/MM/DD HH:mm:ss')} 로 수정 했습니다`);
 
         res.send({ret: 0});
     } catch (e) {
@@ -136,7 +143,7 @@ exports.make = async (req,res)=> {
 
         await db.queryTran(conn, `update user_guild set guild_sn = ${guild_sn}, grade = 3 where user_sn = ${userinfo.sn}`);
 
-        await saveUserInfo(req, {sn: userinfo.sn, grade: 3, guild: guild_sn});
+        await saveUserInfo(req, {sn: userinfo.sn});
 
         await db.endTran(conn);
 
@@ -186,7 +193,7 @@ exports.joinReq = async (req, res)=> {
 
         await db.queryTran(conn, `update user_guild set guild_sn = ${guild_sn}, grade = 0 where user_sn = ${userinfo.sn}`);
 
-        await saveUserInfo(req, {sn: userinfo.sn, grade: 0, guild: guild_sn});
+        await saveUserInfo(req, {sn: userinfo.sn});
 
         db.endTran(conn);
 
@@ -249,9 +256,16 @@ exports.changeGrade = async (req, res)=> {
 
         conn = await db.beginTran();
 
+        const gradeStr = ['탈퇴', '일반', '컷 입력 가능', '길드마스터'];
+
         for( let idx in userSNList ) {
             const sn = userSNList[idx];
             await db.queryTran(conn, `update user_guild set grade = ${grade} where guild_sn = ${userinfo.guild} and user_sn = ${sn}`);
+
+            const pUser = await db.queryTran(conn, `select nick from account where sn = ${sn}`);
+            if( pUser.rows.length <= 0 ) continue;
+
+            await _WriteGuildLog(userinfo.guild, userinfo.sn, `유저 [${pUser.rows[0].nick}] 의 권한을 [${gradeStr[grade]}] 로 변경 했습니다`);
         }
 
         db.endTran(conn);
@@ -276,11 +290,36 @@ exports.kickUser = async (req, res)=> {
         for( let idx in userSNList ) {
             const sn = userSNList[idx];
             await db.queryTran(conn, `update user_guild set grade = 0, guild_sn = -1 where guild_sn = ${userinfo.guild} and user_sn = ${sn}`);
-        }
 
-        db.endTran(conn);
+            const pUser = await db.queryTran(conn, `select nick from account where sn = ${sn}`);
+            if( pUser.rows.length <= 0 ) continue;
+
+            await _WriteGuildLog(userinfo.guild, userinfo.sn, `유저 [${pUser.rows[0].nick}] 를 탈퇴시켰습니다`);
+        }        
+
+        await db.endTran(conn);
 
         res.send({ret: 0});        
+    } catch (e) {
+        db.rollback(conn);
+        ErrorProc(res, e);        
+    }
+}
+
+exports.loadLogs = async (req, res)=> {    
+    try {
+        const userinfo = await GetUserInfo(req);
+        if( userinfo.grade <= 0 ) throw -1;
+        const page = req.body.page;
+        const cntPerPage = 20;
+        const startIndex = cntPerPage * page;
+
+        const p = await db.query(`select a.nick, gl.* from guildlog gl join account a on gl.user_sn = a.sn where guild_sn = ${userinfo.guild} order by regdate desc limit ${startIndex}, ${cntPerPage}`);
+        const list = p.rows;
+
+        const p2 = await db.query(`select count(*) cnt from guildlog`);
+
+        res.send({ret: 0, logs: list, total: p2.rows[0].cnt });
     } catch (e) {
         ErrorProc(res, e);        
     }
