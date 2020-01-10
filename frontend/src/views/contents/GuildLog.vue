@@ -47,7 +47,7 @@
                 const p = await this.axios.post('/guild/loadLogs', {page: page});
                 
                 this.logs = p.data.logs;
-                this.total = Math.floor(p.data.total / 20) + 1;
+                this.total = Math.ceil(p.data.total / 20);
             },
             pageChange(val) {
                 const page = Number(Number(val)-1);
