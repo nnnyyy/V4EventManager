@@ -62,7 +62,7 @@ let baklist = [];
                     baklist = [];
                     mFilterField = new Map();
 
-                    let _f = localStorage.getItem("favorite");
+                    let _f = localStorage.getItem(`favorite${this.$store.state.guild}`);
                     if( !_f ) _f = [];
                     else _f = JSON.parse(_f);
                     const mFavorite = new Map();
@@ -154,7 +154,7 @@ let baklist = [];
                 })
             },
             onFavorite(item) {
-                let _f = localStorage.getItem("favorite");                
+                let _f = localStorage.getItem(`favorite${this.$store.state.guild}`);                
                 if( !_f ) _f = [];                        
                 else _f = JSON.parse(_f);        
                 if( _f.indexOf(item.sn) != -1 ) {
@@ -166,7 +166,7 @@ let baklist = [];
                     item.favorite = true;
                 }
 
-                localStorage.setItem('favorite', JSON.stringify(_f));
+                localStorage.setItem(`favorite${this.$store.state.guild}`, JSON.stringify(_f));
                 this.onAlign();
             }
         },

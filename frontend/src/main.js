@@ -24,6 +24,8 @@ import PageBaseGuildMasterOnly from './views/components/PageBaseGuildMasterOnly'
 Vue.component('PageBaseGuildMasterOnly', PageBaseGuildMasterOnly);
 import PageBaseGuildMemberOnly from './views/components/PageBaseGuildMemberOnly'
 Vue.component('PageBaseGuildMemberOnly', PageBaseGuildMemberOnly);
+import PageBaseNoGuildOnly from './views/components/PageBaseNoGuildOnly'
+Vue.component('PageBaseNoGuildOnly', PageBaseNoGuildOnly);
 
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate);

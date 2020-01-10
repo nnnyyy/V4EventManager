@@ -1,6 +1,6 @@
 <template>
     <div class="f-row f-ac" id="Top">
-        <div class="mgl-4" style="font-size: 32px; color: white;">V4 보스 컷 관리기</div>
+        <div class="mgl-4" style="font-size: 32px; color: white;">V4 길드 보스 컷 관리기</div>
         <div class="menu-root f-row f-afe mgl-6" style="height: 56px; color: white;">
             <div v-show="isShow(it)" class="item btn" :key="idx" v-for="(it,idx) in menu" @click="onLink(it.link)" :class="[getCls(it.link)]" >{{it.name}}</div>
         </div>

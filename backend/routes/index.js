@@ -15,3 +15,4 @@ router.post('/guild/loadBossEvent', guild.loadBossEvent);
 router.post('/guild/cut', guild.cut);
 router.post('/guild/modifyCutTime', guild.modifyCutTime);
 router.post('/guild/modifyCooltime', guild.modifyCooltime);
+router.post('/guild/make', guild.make);
