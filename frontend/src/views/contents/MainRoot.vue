@@ -49,11 +49,20 @@ let baklist = [];
         },
         methods: {
             update() {
-                this.list.forEach(it=> {                    
+                this.list.forEach(async it=> {                    
                     if( it.cuttime == 0 ) it.remain = -1;
                     else {
                         let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
-                        if( remain < 0) remain = 0;
+                        if( remain < 0)  {
+                            remain = 0;
+                        }
+                        
+                        if( it.remain != 0 && remain == 0 ) {
+                            const ret = await Notification.requestPermission();
+                            if( ret == 'denied') return;
+                            let noti = new Notification("v4 보스 관리기 알람", {body: `[${it.boss_name}] 보스가 뜰 시간이에요!`});
+                            setTimeout(()=>noti.close(),10000);
+                        }
                         it.remain = remain;
                     }
                 })
@@ -94,7 +103,10 @@ let baklist = [];
                     this.$nextTick(()=>{
                         this.list = p.data.list;
                         this.onAlign(this.align);
-                    })
+                    });
+
+                    const ret = await Notification.requestPermission();
+                    if( ret == 'denied') return;
                 } catch (e) {
                     if( e == -1 || e == -2 || e == -101 ) return;
                     alert(e);
