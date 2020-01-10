@@ -14,6 +14,13 @@
                 </div>
             </div>
         </template>
+        <template v-else-if="$store.state.guild!==-1 && $store.state.state===0">
+            <div id="PageBase" class="f-col f-jc f-ac pda-2 mgw-2 border-radius">
+                <div class="fts-title-1">길드 가입을 신청한 상태 입니다.</div>
+                <div class="f-row f-jc mgt-4">
+                </div>
+            </div>
+        </template>
         <template v-else>
             <slot></slot>
         </template>        

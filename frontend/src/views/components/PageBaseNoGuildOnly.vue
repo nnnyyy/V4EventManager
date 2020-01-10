@@ -5,7 +5,7 @@
                 <div class="fts-title-1">로그인이 필요합니다.</div>
             </div>
         </template>
-        <template v-else-if="$store.state.guild != -1">
+        <template v-else-if="$store.state.guild != -1 && $store.state.state > 1">
             <div id="PageBase" class="f-base f-jc f-ac pda-2 mgw-2 border-radius">
                 <div class="fts-title-1">이미 길드가 존재합니다</div>
             </div>

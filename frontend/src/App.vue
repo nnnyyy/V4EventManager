@@ -22,9 +22,12 @@ export default {
           this.$store.state.auth = true;
           this.$store.state.state = userinfo.grade;
           this.$store.state.guild = userinfo.guild;
-          setTimeout(()=> {
-            this.$EventBus.$emit('logined');
-          }, 200);
+          if( this.$store.state.guild != -1 && 
+              this.$store.state.state == 0 && 
+              window.location.pathname != '/JoinGuild' ) {
+            window.location.href = '/JoinGuild';
+            return;
+          }
 
       } catch (e) {
         if( e == -101 ) {          

@@ -34,7 +34,11 @@ exports.loadBossEvent = async (req,res)=> {
     try {
         const userinfo = await GetUserInfo(req);
         const guildSN = userinfo.guild;
-        let p = await db.query(`select b.*, ifnull(c.boss_sn, -1) boss_sn, ifnull(c.cuttime,0) cuttime, ifnull(c.gaptimemin, 0) gaptimemin from boss b left join (select * from cuttime where guild_sn = ${guildSN}) c on b.sn = c.boss_sn`);
+        if( guildSN == -1 ) throw -1;
+        let p = await db.query(`select * from user_guild where user_sn = ${userinfo.sn}`);
+        if( p.rows[0].grade == 0 ) throw -2;
+
+        p = await db.query(`select b.*, ifnull(c.boss_sn, -1) boss_sn, ifnull(c.cuttime,0) cuttime, ifnull(c.gaptimemin, 0) gaptimemin from boss b left join (select * from cuttime where guild_sn = ${guildSN}) c on b.sn = c.boss_sn`);
 
         res.send({ret: 0, list: p.rows});
     } catch (e) {
@@ -139,6 +143,145 @@ exports.make = async (req,res)=> {
         res.send({ret: 0});
     } catch (e) {
         db.rollback(conn);
+        ErrorProc(res, e);        
+    }
+}
+
+exports.checkUserGuildState = async (req, res)=> {
+    try {
+        const userinfo = await GetUserInfo(req);
+
+        const p = await db.query(`SELECT * FROM guild g right join user_guild u on g.sn = u.guild_sn where user_sn = ${userinfo.sn}`);        
+
+        res.send({ret: 0, grade: p.rows[0].grade, guild_sn: p.rows[0].guild_sn, guildname: p.rows[0].guildname});
+    } catch (e) {
+        ErrorProc(res,e);        
+    }
+}
+
+exports.search = async (req, res)=> {
+
+    try {
+        const guildname = req.body.guildname;
+        const p = await db.query(`SELECT sn guild_sn, guildname, count(*) user_cnt FROM guild g join user_guild u on g.sn = u.guild_sn where grade > 0 and guildname = '${guildname}' group by sn`);
+
+        res.send({ret: 0, list: p.rows});
+    } catch (e) {
+        ErrorProc(res,e);        
+    }
+}
+
+exports.joinReq = async (req, res)=> {
+
+    let conn = null;
+
+    try {
+        const userinfo = await GetUserInfo(req);
+        const guild_sn = req.body.data.guild_sn;
+
+        conn = await db.beginTran();
+
+        let p = await db.queryTran(conn, `select * from user_guild where user_sn = ${userinfo.sn}`);
+        if( p.rows[0].guild_sn != -1 ) throw -1;
+
+        await db.queryTran(conn, `update user_guild set guild_sn = ${guild_sn}, grade = 0 where user_sn = ${userinfo.sn}`);
+
+        await saveUserInfo(req, {sn: userinfo.sn, grade: 0, guild: guild_sn});
+
+        db.endTran(conn);
+
+        res.send({ret: 0});
+    } catch (e) {
+        db.rollback(conn);
+        ErrorProc(res,e);        
+    }
+}
+
+exports.cancelJoin = async (req, res)=> {
+
+    let conn = null;
+
+    try {
+        const userinfo = await GetUserInfo(req);
+
+        conn = await db.beginTran();
+
+        let p = await db.queryTran(conn, `select * from user_guild where user_sn = ${userinfo.sn}`);
+        if( p.rows[0].grade != 0 ) throw -1;
+
+        await db.queryTran(conn, `update user_guild set guild_sn = -1, grade = 0 where user_sn = ${userinfo.sn}`);
+
+        await saveUserInfo(req, {sn: userinfo.sn, grade: 0, guild: -1});
+
+        db.endTran(conn);
+
+        res.send({ret: 0});
+    } catch (e) {
+        db.rollback(conn);
+        ErrorProc(res,e);        
+    }
+}
+
+exports.loadGuildMembers = async (req, res)=> {
+    try {
+        const userinfo = await GetUserInfo(req);
+
+        let q = `SELECT * FROM guild g join 
+        (select a.nick, u1.* from account a join user_guild u1 on a.sn = u1.user_sn ) u 
+        on g.sn = u.guild_sn where sn = ${userinfo.guild} and grade >= 0`;
+
+        const p = await db.query(q);
+
+        res.send({ret: 0, list: p.rows});
+    } catch (e) {
+        ErrorProc(res, e);        
+    }
+}
+
+exports.changeGrade = async (req, res)=> {
+    let conn = null;
+    try {
+        const userinfo = await GetUserInfo(req);
+        if( userinfo.grade != 3 ) throw -1;
+
+        const userSNList = req.body.userSNList;
+        const grade = req.body.grade;
+
+        conn = await db.beginTran();
+
+        for( let idx in userSNList ) {
+            const sn = userSNList[idx];
+            await db.queryTran(conn, `update user_guild set grade = ${grade} where guild_sn = ${userinfo.guild} and user_sn = ${sn}`);
+        }
+
+        db.endTran(conn);
+
+        res.send({ret: 0});
+    } catch (e) {
+        db.rollback(conn);
+        ErrorProc(res, e);        
+    }
+}
+
+exports.kickUser = async (req, res)=> {
+    let conn = null;
+    try {
+        const userinfo = await GetUserInfo(req);
+        if( userinfo.grade != 3 ) throw -1;
+
+        const userSNList = req.body.userSNList;
+
+        conn = await db.beginTran();
+
+        for( let idx in userSNList ) {
+            const sn = userSNList[idx];
+            await db.queryTran(conn, `update user_guild set grade = 0, guild_sn = -1 where guild_sn = ${userinfo.guild} and user_sn = ${sn}`);
+        }
+
+        db.endTran(conn);
+
+        res.send({ret: 0});        
+    } catch (e) {
         ErrorProc(res, e);        
     }
 }

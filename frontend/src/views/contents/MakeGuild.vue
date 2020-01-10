@@ -52,12 +52,12 @@
                 }
 
                 if( special.test(this.guildname) || space.test(this.guildname) ) {
-                    alert('닉네임에 특수문자나 공백이 존재합니다');
+                    alert('길드명에 특수문자나 공백이 존재합니다');
                     return false;
                 }
 
                 if( this.getTextLength(this.guildname) > 12 || this.getTextLength(this.guildname) < 2 ) {
-                    alert('2자 미만, 6자 초과 닉네임 사용이 불가능합니다');
+                    alert('2자 미만, 6자 초과 길드명 사용이 불가능합니다');
                     return false;
                 }
 

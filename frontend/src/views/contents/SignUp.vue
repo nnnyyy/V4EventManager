@@ -17,7 +17,7 @@
                 </tr>
                 <tr>
                     <td>비밀번호 재입력</td>
-                    <td><input type="password" v-model="pwre"></td>
+                    <td><input type="password" v-model="pwre" @keyup.13="onBtnSignUp"></td>
                 </tr>
                 <tr>
                     <td colspan="2" >

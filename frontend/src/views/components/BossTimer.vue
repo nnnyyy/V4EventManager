@@ -17,7 +17,7 @@
             <td >{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}}</td>
-            <td>{{getTypeName(data.type)}}</td>
+            <td :class="[getTypeCls()]">{{getTypeName(data.type)}}</td>
             <td style="text-align: center;">
                 <div class="f-row" v-if="modifyCooltime">
                     <input type="text" style="width: 50px;" v-model="cooltime" placeholder="분 단위" />
@@ -118,6 +118,10 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
 
                 return "hasImage";
             },
+            getTypeCls() {
+                if( this.data.type == 1) return "type-2";
+                return "type-1";
+            },
             onMode(mode) {
                 if( mode == 'modifyCuttime') {
                     if(this.data.cuttime == 0) {
@@ -190,5 +194,8 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
 
 <style lang="scss" scoped>
 .boss-timer.root td.alert { background-color: $cr-cancel; color: white; }
+.boss-timer.root:hover { background-color: #B2DFDB; }
 .boss-timer.root td.hasImage {  }
+.type-1 { color: blue; }
+.type-2 { color: purple; }
 </style>

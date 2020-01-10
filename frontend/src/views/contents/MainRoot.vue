@@ -8,7 +8,7 @@
         </PermanentWnd>
         <div class="left pda-4" style="flex: auto;">
             <div v-show="false" class="f-row f-wrap">
-                <div class="pda-1" style="width: 160px;" v-for="it in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
+                <div class="pda-1" style="width: 160px;" :key="idx" v-for="(it,idx) in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
             </div>
             <table class="type-1">
                 <BossTimer top=true @align="onAlign" />
@@ -40,12 +40,10 @@ let baklist = [];
             }
         },
         beforeCreate() {
-            this.$EventBus.$on('logined', ()=>{
-                this.loadEvent();
-            })
         },
         created () {
             setInterval(this.update, 100);
+            this.loadEvent();
         },
         mounted() {
         },
@@ -63,6 +61,7 @@ let baklist = [];
             async loadEvent() {
                 try {
                     const p = await this.axios.post('/guild/loadBossEvent');
+                    if(p.data.ret != 0) throw p.data.ret;
                     this.list = [];           
                     this.filter_field = [];
                     baklist = [];
@@ -97,6 +96,7 @@ let baklist = [];
                         this.onAlign(this.align);
                     })
                 } catch (e) {
+                    if( e == -1 || e == -2 ) return;
                     alert(e);
                 }
             },

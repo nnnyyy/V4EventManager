@@ -14,9 +14,12 @@
 // 레이아웃
 #Top { height: $lo-top-height; background-color: $cr-primary-1; }
 
+.table-type-1-fs { font-size: 12.5px; }
+
 table.type-1 { border-collapse: collapse; width: 100%; }
 table.type-1 .top td { text-align: center; background-color: $cr-primary-1; border: 1.5px solid black; color: white; }
 table.type-1 td { border: 1.5px solid black; @extend .pdh-1; @extend .pdw-4; font-size: 12.5px; }
+table.type-1 .center td { text-align: center; }
 
 table.form-1 { border-collapse: separate; width: 100%; }
 table.form-1 tr > td:not([colspan="2"]):first-child { text-align: center; background-color: $cr-primary-1; color: white; @extend .pdh-1; @extend .pdw-4; }
