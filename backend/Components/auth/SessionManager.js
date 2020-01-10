@@ -7,7 +7,7 @@ exports.initSession = function(app) {
     let cookieOption = {}
     if( process.env.NODE_ENV != 'development' ) {
         //cookieOption.sameSite = 'None',
-        cookieOption.domain = '.databucket.duckdns.org'
+        cookieOption.domain = '.v4boss.info'
     }
 
     var _session = session({
