@@ -41,7 +41,7 @@ let baklist = [];
         },
         created () {
             setInterval(this.update, 100);
-            this.loadEvent();            
+            if( this.$store.state.auth ) this.loadEvent();            
         },
         methods: {
             update() {
