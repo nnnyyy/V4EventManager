@@ -62,7 +62,7 @@ insert into boss ( dimention_name, area_name, field_name, boss_name, type ) valu
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '데커스화산', '배반자의 소굴', '라빌린', 1);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '데커스화산', '비명소리 웅덩이', '라파커스', 1);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '달그림자 호수', '바르트', 2);
-insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고account원', '별자리 호수', '비아', 2);
+insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '별자리 호수', '비아', 2);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '빼앗긴 경작지 ', '키벨레', 2);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '서리 폭풍 비탈', '렌티', 1);
 insert into boss ( dimention_name, area_name, field_name, boss_name, type ) values ('실루나스', '비텐고원', '서리 폭풍 비탈', '바르돌', 1);
