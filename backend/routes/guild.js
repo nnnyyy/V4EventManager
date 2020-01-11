@@ -317,7 +317,7 @@ exports.loadLogs = async (req, res)=> {
         const p = await db.query(`select a.nick, gl.* from guildlog gl join account a on gl.user_sn = a.sn where guild_sn = ${userinfo.guild} order by regdate desc limit ${startIndex}, ${cntPerPage}`);
         const list = p.rows;
 
-        const p2 = await db.query(`select count(*) cnt from guildlog`);
+        const p2 = await db.query(`select count(*) cnt from guildlog where guild_sn = ${userinfo.guild}`);
 
         res.send({ret: 0, logs: list, total: p2.rows[0].cnt });
     } catch (e) {
