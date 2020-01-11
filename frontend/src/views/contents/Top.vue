@@ -1,8 +1,11 @@
 <template>
     <div class="f-row f-ac" id="Top">
-        <div class="mgl-4" style="font-size: 32px; color: white;">V4 길드 보스 컷 관리기</div>
+        <div class="mgl-4 btn" style="font-size: 32px; color: white;" @click="onGoHome">V4 길드 보스 컷 관리기</div>
         <div class="menu-root f-row f-afe mgl-6" style="height: 56px; color: white;">
             <div v-show="isShow(it)" class="item btn" :key="idx" v-for="(it,idx) in menu" @click="onLink(it.link)" :class="[getCls(it.link)]" >{{it.name}}</div>
+            <template v-if="$store.state.auth && $store.state.guild != -1 && ( $store.state.state < 3  && $store.state.state > 0 )">
+                <div class="item"><CustomBtn bg_cancel @listener="onSecession">길드 탈퇴하기</CustomBtn></div>
+            </template>
         </div>
     </div>
 </template>
@@ -33,6 +36,12 @@
                 }
                 window.location.href = '/' + link;
             },
+            async onSecession() {
+                if( !confirm('정말 탈퇴하시겠습니까?')) return;
+
+                await this.axios.post('/guild/secession');
+                window.location.href = '/';
+            },
             getCls(link) {
                 if( window.location.pathname == `/${link}` ) return "selected";
                 return "";
@@ -48,6 +57,9 @@
                 }
 
                 return false;
+            },
+            onGoHome() {
+                window.location.href = '/';
             }
         },
         created () {            

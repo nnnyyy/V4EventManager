@@ -2,7 +2,7 @@
     <div>
         <template v-if="$store.state.auth===false">
             <div id="PageBase" class="f-base f-jc f-ac pda-2 mgw-2 border-radius">
-                <div class="fts-title-1">로그인이 필요합니다.</div>
+                <NeedLogin/>
             </div>
         </template>
         <template v-else-if="$store.state.guild===-1">

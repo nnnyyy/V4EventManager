@@ -324,3 +324,17 @@ exports.loadLogs = async (req, res)=> {
         ErrorProc(res, e);        
     }
 }
+
+exports.secession = async (req, res)=> {    
+    try {
+        const userinfo = await GetUserInfo(req);        
+        
+        await db.query(`update user_guild set guild_sn = -1, grade = 0 where user_sn = ${userinfo.sn}`);
+
+        await _WriteGuildLog(userinfo.guild, userinfo.sn, `유저가 탈퇴했습니다`);
+        
+        res.send({ret: 0, logs: list, total: p2.rows[0].cnt });
+    } catch (e) {
+        ErrorProc(res, e);        
+    }
+}

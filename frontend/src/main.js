@@ -26,6 +26,8 @@ import PageBaseGuildMemberOnly from './views/components/PageBaseGuildMemberOnly'
 Vue.component('PageBaseGuildMemberOnly', PageBaseGuildMemberOnly);
 import PageBaseNoGuildOnly from './views/components/PageBaseNoGuildOnly'
 Vue.component('PageBaseNoGuildOnly', PageBaseNoGuildOnly);
+import NeedLogin from './views/components/NeedLogin'
+Vue.component('NeedLogin', NeedLogin);
 
 import Paginate from 'vuejs-paginate'
 Vue.component('paginate', Paginate);
