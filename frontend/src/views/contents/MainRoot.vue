@@ -155,6 +155,9 @@ let reloadTimeIndex = -1;
                 if( this.align == type ) type = '';
                 else if(!type) type = this.align;
                 this.align = type;
+
+                localStorage.setItem('align', this.align);
+                
                 switch(type){
                     case 'remain': 
                     this.list.sort((a,b)=> {
@@ -173,9 +176,7 @@ let reloadTimeIndex = -1;
                         return a.sn - b.sn;
                     })
                     break;
-                }
-
-                localStorage.setItem('align', this.align);
+                }                
             },
             onFullSizeMap(src, boss) {
                 const _img = new Image();
