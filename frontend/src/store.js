@@ -9,7 +9,8 @@ export default new Vuex.Store({
     state: 0, /* 0 일반유저 1 마스터 */
     guild: -1, // -1 면 길드가입 안함
     guildname: '',
-    nick: ''
+    nick: '',
+    isMobileSize: false
   },
   mutations: {    
   },

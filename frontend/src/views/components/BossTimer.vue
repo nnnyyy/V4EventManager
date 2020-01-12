@@ -1,22 +1,31 @@
-<template>    
-        <tr v-if="top" class="boss-timer root top">            
-            <td style="width: 150px;">지역명</td>
-            <td style="width: 180px;">필드</td>
-            <td style="width: 130px;">보스 이름</td>
-            <td style="width: 150px;">타입</td>
-            <td style="min-width: 100px;">쿨타임(분)</td>
-            <td style="min-width: 150px;">컷 시간</td>
-            <td style="width: 150px;">예상 젠 시간</td>
-            <td style="width: 130px;" class="btn" @click="$emit('align', 'remain')">남은 시간</td>
-            <td style="width: 100px;">컷</td>
-            <td style="width: 100px;">즐겨찾기</td>
+<template>        
+        <tr v-if="top" class="boss-timer root top">
+            <template v-if="!$store.state.isMobileSize">
+                <td style="width: 150px;">지역명</td>            
+                <td style="width: 180px;">필드</td>
+                <td style="width: 130px;">보스 이름</td>
+                <td style="width: 150px;">타입</td>
+                <td style="min-width: 100px;">쿨타임(분)</td>
+                <td style="min-width: 150px;">컷 시간</td>
+                <td style="width: 150px;">예상 젠 시간</td>
+                <td style="width: 130px;" class="btn" @click="$emit('align', 'remain')">남은 시간</td>
+                <td style="width: 100px;">컷</td>
+                <td style="width: 100px;">즐겨찾기</td>
+            </template>            
+            <template v-else>
+                <td>보스 이름</td>                
+                <td>컷 시간</td>                
+                <td style="width: 130px;" class="btn" @click="$emit('align', 'remain')">남은 시간</td>
+                <td style="width: 100px;">컷</td>
+                <td style="width: 100px;">즐겨찾기</td>                
+            </template>
         </tr>
         <tr v-else class="boss-timer root">
-            <td >{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
-            <td :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
+            <td v-if="!$store.state.isMobileSize">{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
+            <td v-if="!$store.state.isMobileSize" :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 14px;">my_location</i></td>
-            <td :class="[getTypeCls()]">{{getTypeName(data.type)}}</td>
-            <td style="text-align: center;">
+            <td v-if="!$store.state.isMobileSize" :class="[getTypeCls()]">{{getTypeName(data.type)}}</td>
+            <td v-if="!$store.state.isMobileSize" style="text-align: center;">
                 <div class="f-row" v-if="modifyCooltime">
                     <input type="text" style="width: 50px;" v-model="cooltime" placeholder="분 단위" />
                     <div class="mgl-1"><CustomBtn bg_confirm @listener="onModifyCooltime">수정</CustomBtn></div>
@@ -32,7 +41,7 @@
                 </div>
                 <div v-else>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i></div>
             </td>
-            <td style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
+            <td v-if="!$store.state.isMobileSize" style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
             <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
             <td style="text-align: center;"><CustomBtn bg_confirm @listener="onCut">지금 컷</CustomBtn></td>
             <td class="btn" style="text-align: center;" @click="onFavorite" ><i style="color: black;" class="material-icons">{{data.favorite?'star':'star_border'}}</i></td>

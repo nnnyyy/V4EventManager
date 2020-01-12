@@ -9,7 +9,7 @@
             </div>
         </PermanentWnd>
         <div class="left pda-4" style="flex: auto;">
-            <div class="f-row f-ac pdb-2">
+            <div v-if="!$store.state.isMobileSize" class="f-row f-ac pdb-2">
                 <div class="mgr-3">보스 검색</div>
                 <input class="type-1" type="text" v-model="ipSearchBoss" @keyup="onChangeSearchBoss">
             </div>
@@ -58,6 +58,8 @@ let reloadTimeIndex = -1;
                 this.list = [];
                 clearTimeout(reloadTimeIndex);
                 reloadTimeIndex = setTimeout(()=>this.list=baklist, 300);
+                if( window.innerWidth <= 600 ) this.$store.state.isMobileSize = true;
+                else this.$store.state.isMobileSize = false;
             }
         },
         mounted() {
@@ -118,6 +120,7 @@ let reloadTimeIndex = -1;
 
                     this.$nextTick(()=>{
                         this.list = p.data.list;
+                        this.align = localStorage.getItem('align') || '';
                         this.onAlign(this.align);
 
                         this.onChangeSearchBoss();
@@ -169,6 +172,8 @@ let reloadTimeIndex = -1;
                     })
                     break;
                 }
+
+                localStorage.setItem('align', this.align);
             },
             onFullSizeMap(src, boss) {
                 const _img = new Image();

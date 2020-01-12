@@ -2,7 +2,7 @@
     <PageBaseNoGuildOnly>
         <div class="content f-col f-wrap f-ac f-jc">
             <div class="mgb-2" style="font-size: 24px;">길드 생성</div>
-            <div class="mgb-4" style="width: 400px; font-size: 14px;">
+            <div class="mgb-4" style="max-width: 400px; font-size: 14px;">
                 <div>길드 생성을 하고 나면 컷 관리 페이지를 운영할 수 있습니다. 길드명은 중복 불가입니다</div>
                 <div class="alert">장기간 미사용시는 삭제 됩니다</div>
             </div>

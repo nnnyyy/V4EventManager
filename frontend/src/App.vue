@@ -13,8 +13,15 @@ export default {
     return {
     }
   },
-  async created() {
+  async created() {      
       try {
+          window.onresize = ()=> {
+              if( window.innerWidth <= 600 ) this.$store.state.isMobileSize = true;
+              else this.$store.state.isMobileSize = false;
+          }
+
+          window.onresize();
+          
           const p = await this.axios.post('/api/auth/check');
           if(p.data.ret != 0 ) throw p.data.ret;
           const userinfo = p.data.info;

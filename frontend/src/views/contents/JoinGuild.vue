@@ -3,7 +3,7 @@
             <div class="content f-col f-wrap f-ac f-jc">
                 <template v-if="mode==0">
                     <div class="mgb-2" style="font-size: 24px;">길드 가입</div>
-                    <div class="mgb-4" style="width: 400px; font-size: 14px; text-align: center;">
+                    <div class="mgb-4" style="max-width: 400px; font-size: 14px; text-align: center;">
                         <div>길드 가입 요청 후에 페이지 관리자의 승인이 필요합니다</div>
                         <div class="alert">장기간 미사용시는 삭제 됩니다</div>
                     </div>
