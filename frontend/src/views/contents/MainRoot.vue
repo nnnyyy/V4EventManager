@@ -2,8 +2,10 @@
 <PageBaseGuildMemberOnly>
     <div class="f-row">
         <PermanentWnd :show="fullsizeMap" @onClick="onCloseFullSizeMap">
-            <div>
-                <img @click="onClickFullSizeImage($event)" :src="fullsizeMapSrc"/>
+            <div style="height:100%;" class="pos-rel f-row f-jc f-ac">
+                <img style="max-height: 80%;" @click="onClickFullSizeImage($event)" :src="fullsizeMapSrc"/>                
+                <div v-if="bossData" class="bossArea" :style="getBossDataStyle(bossData)">{{bossData.name}}</div>
+                <div v-if="bossData" class="bossArea-point" :style="getBossDataStyle(bossData)"></div>
             </div>
         </PermanentWnd>
         <div class="left pda-4" style="flex: auto;">
@@ -36,6 +38,7 @@ let baklist = [];
                 mapinfo: {field: '파멸의 범람지'},
                 fullsizeMap: false,
                 fullsizeMapSrc: '',
+                bossData: null,
                 filter_field: []
             }
         },
@@ -120,7 +123,14 @@ let baklist = [];
                 this.loadEvent();
             },
             onSelectField(mapdata) {
-                this.onFullSizeMap(mapdata.src);
+                this.bossData = null;
+                this.onFullSizeMap(mapdata.mapdata.src, mapdata.boss);
+            },
+            getBossDataStyle(boss) {
+                return {
+                    "left": `${boss.x}%`,
+                    "top": `${boss.y}%`
+                }
             },
             onAlign(type) {
                 if( this.align == type ) type = '';
@@ -146,9 +156,10 @@ let baklist = [];
                     break;
                 }
             },
-            onFullSizeMap(src) {
+            onFullSizeMap(src, boss) {
                 this.fullsizeMapSrc = src;
                 this.fullsizeMap = true;
+                this.bossData = boss;
             },
             onCloseFullSizeMap() {
                 this.fullsizeMap = false;
@@ -195,4 +206,6 @@ let baklist = [];
 
 <style lang="scss" scoped>
 .left { height: calc(#{$lo-bot-height} - 16px); overflow-y: auto; }
+.bossArea { @extend .animate-flicker; position: absolute; padding: 4px 8px; background-color: red; color: white; font-weight: bolder; font-size: 15px; border-radius: 4px; border: 1.5px solid black; }
+.bossArea-point { position: absolute; width: 10px; height: 10px; background-color: blue; }
 </style>

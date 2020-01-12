@@ -16,7 +16,7 @@
             <td>{{data.dimention_name}}</td>
             <td >{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
-            <td>{{data.boss_name}}</td>
+            <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 14px;">my_location</i></td>
             <td :class="[getTypeCls()]">{{getTypeName(data.type)}}</td>
             <td style="text-align: center;">
                 <div class="f-row" v-if="modifyCooltime">
@@ -59,7 +59,8 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
                     mm: '05'
                 },
                 modifyCooltime: false,
-                cooltime: ''
+                cooltime: '',
+                bossMarker: null
             }
         },
         created () {
@@ -119,6 +120,27 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
             },
             hasFieldData() {
                 return !!MapData[this.data.field_group];
+            },
+            hasBossData() {
+                if( !this.hasAreaData() && !this.hasFieldData() ) return false;
+                let marker = [];
+                if( this.hasAreaData() ) {
+                    marker = MapData[this.data.area_name].marker;
+                }
+
+                if( this.hasFieldData() ) {
+                    marker = MapData[this.data.field_group].marker;
+                }
+
+                for( let idx in marker ) {
+                    const info = marker[idx];
+                    if( info.name == this.data.boss_name )  {
+                        this.bossMarker = info;
+                        return true;
+                    }
+                }
+
+                return false;
             },
             getFieldCls() {
                 if( !this.hasFieldData() ) return;
@@ -196,10 +218,13 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
                 this.modifyCooltime = false;
             },
             onSelectField() {
-                this.$emit('onSelectField', MapData[this.data.field_group]);
+                this.$emit('onSelectField', {mapdata: MapData[this.data.field_group], boss: null });
             },
             onSelectArea() {
-                this.$emit('onSelectField', MapData[this.data.area_name]);
+                this.$emit('onSelectField', {mapdata: MapData[this.data.area_name], boss: null});
+            },
+            onSelectBoss() {
+                this.$emit('onSelectField', {mapdata: MapData[this.data.area_name], boss: this.bossMarker});
             },
             onFavorite() {
                 this.$emit('onFavorite');
