@@ -32,7 +32,7 @@ export default {
           }
 
       } catch (e) {
-        if( e == -101 ) {          
+        if( e == -101 || e == -2 ) {
           this.$store.state.auth = false;
           return;
         }
