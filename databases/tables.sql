@@ -12,8 +12,6 @@ create table account (
     primary key(sn)
 ) DEFAULT CHARSET=utf8;
 
-insert into account (nick, pw) values ('왕야옹', password('1234'));
-
 drop table if exists user_guild;
 create table user_guild (
 	user_sn int not null,
