@@ -2,10 +2,10 @@
 <PageBaseGuildMemberOnly>
     <div class="f-row">
         <PermanentWnd :show="fullsizeMap" @onClick="onCloseFullSizeMap">
-            <div style="height:100%;" class="pos-rel f-row f-jc f-ac">
-                <img style="max-height: 80%;" @click="onClickFullSizeImage($event)" :src="fullsizeMapSrc"/>                
+            <div :style="mapDivStyle" class="pos-rel f-row f-jc f-ac">
+                <img :style="mapDivStyle" @click="onClickFullSizeImage($event)" :src="fullsizeMapSrc"/>   
                 <div v-if="bossData" class="bossArea" :style="getBossDataStyle(bossData)">{{bossData.name}}</div>
-                <div v-if="bossData" class="bossArea-point" :style="getBossDataStyle(bossData)"></div>
+                <div v-if="bossData" class="bossArea-point" :style="getBossDataStyle(bossData)"></div>             
             </div>
         </PermanentWnd>
         <div class="left pda-4" style="flex: auto;">
@@ -25,6 +25,7 @@
 
 <script>
 import BossTimer from '../components/BossTimer';
+import $ from 'jquery';
 let mFilterField = new Map();
 let baklist = [];
     export default {
@@ -39,7 +40,8 @@ let baklist = [];
                 fullsizeMap: false,
                 fullsizeMapSrc: '',
                 bossData: null,
-                filter_field: []
+                filter_field: [],
+                mapDivStyle: {}
             }
         },
         beforeCreate() {
@@ -157,9 +159,21 @@ let baklist = [];
                 }
             },
             onFullSizeMap(src, boss) {
-                this.fullsizeMapSrc = src;
-                this.fullsizeMap = true;
-                this.bossData = boss;
+                const _img = new Image();
+                _img.onload = e=> {
+                    const v = _img.width / _img.height;
+                    _img.height = window.innerHeight * 0.85;
+                    _img.width = _img.height * v;
+                    this.mapDivStyle = {
+                        width: `${_img.width}px`,
+                        height: `${_img.height}px`
+                    }
+                    this.fullsizeMapSrc = src;
+                    this.fullsizeMap = true;
+                    this.bossData = boss;
+                };
+                _img.src = src;
+                
             },
             onCloseFullSizeMap() {
                 this.fullsizeMap = false;
@@ -199,6 +213,9 @@ let baklist = [];
 
                 localStorage.setItem(`favorite${this.$store.state.guild}`, JSON.stringify(_f));
                 this.onAlign();
+            },
+            getMapDivStyle() {
+                
             }
         },
     }
