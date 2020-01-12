@@ -22,8 +22,6 @@ create table user_guild (
     primary key(user_sn)
 )DEFAULT CHARSET=utf8;
 
-insert into user_guild (user_sn, guild_sn, grade) values (1,1,3);
-
 drop table if exists guild;
 create table guild (
 	sn int auto_increment,
