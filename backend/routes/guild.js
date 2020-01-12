@@ -63,7 +63,7 @@ exports.cut = async (req,res)=> {
 
         const p = await db.query(`select * from cuttime where guild_sn = ${guildSN} and boss_sn = ${sn}`);
         if( p.rows.length <= 0 ) {
-            await db.query(`insert into cuttime (guild_sn, boss_sn, cuttime, gaptimemin) values (${guildSN}, ${sn}, now(), 180)`);
+            await db.query(`insert into cuttime (guild_sn, boss_sn, cuttime, gaptimemin) values (${guildSN}, ${sn}, now(), ${bossinfo.term})`);
         }
         else {
             await db.query(`update cuttime set cuttime = now() where guild_sn = ${guildSN} and boss_sn = ${sn}`);
