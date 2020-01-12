@@ -1,7 +1,13 @@
 <template>
     <div class="f-row f-ac" id="Top">
         <div class="mgl-4 btn" style="font-size: 32px; color: white;" @click="onGoHome">V4 길드 보스 컷 관리기</div>
-        <div class="menu-root f-row f-afe mgl-6" style="height: 56px; color: white;">
+        <template>
+            <div v-if="$store.state.auth" class="f-col guild-info-wnd mgl-6">
+                <div>닉 : {{$store.state.nick}}</div>
+                <div v-if="isGuildMember()">길드 : {{$store.state.guildname}}</div>
+            </div>
+        </template>
+        <div class="menu-root f-row f-ac mgl-2" style="color: white;">
             <div v-show="isShow(it)" class="item btn" :key="idx" v-for="(it,idx) in menu" @click="onLink(it.link)" :class="[getCls(it.link)]" >{{it.name}}</div>
             <template v-if="$store.state.auth && $store.state.guild != -1 && ( $store.state.state < 3  && $store.state.state > 0 )">
                 <div class="item"><CustomBtn bg_cancel @listener="onSecession">길드 탈퇴하기</CustomBtn></div>
@@ -60,6 +66,9 @@
             },
             onGoHome() {
                 window.location.href = '/';
+            },
+            isGuildMember() {      
+            return this.$store.state.auth && this.$store.state.guild!=-1 && this.$store.state.state >= 1;
             }
         },
         created () {            
@@ -70,4 +79,5 @@
 <style lang="scss" scoped>
 .menu-root > .item { @extend .mgw-2; @extend .pda-2; }
 .item.selected { color: yellow; }
+.guild-info-wnd { background-color:#01579B; color: white; @extend .pdh-1; @extend .pdw-3; border-radius: 5px; font-size: 13.5px; border: 1.5px solid white; }
 </style>

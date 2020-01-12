@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const ServerManager = require('../Components/ServerManager');
 const auth = require('./auth');
 const guild = require('./guild');
 

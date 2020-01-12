@@ -9,10 +9,14 @@
             </div>
         </PermanentWnd>
         <div class="left pda-4" style="flex: auto;">
+            <div class="f-row f-ac pdb-2">
+                <div class="mgr-3">보스 검색</div>
+                <input class="type-1" type="text" v-model="ipSearchBoss" @keyup="onChangeSearchBoss">
+            </div>
             <div v-show="false" class="f-row f-wrap">
                 <div class="pda-1" style="width: 160px;" :key="idx" v-for="(it,idx) in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
             </div>
-            <table class="type-1">
+            <table class="type-1" style="width: auto;">
                 <BossTimer top=true @align="onAlign" />
             <template v-for="(it,idx) in list">
                 <BossTimer :key="idx" :data="it" @onFavorite="onFavorite(it)" @onCut="onCut" @onCooltime="onCooltime" @onSelectField="onSelectField" />
@@ -25,7 +29,6 @@
 
 <script>
 import BossTimer from '../components/BossTimer';
-import $ from 'jquery';
 let mFilterField = new Map();
 let baklist = [];
     export default {
@@ -41,7 +44,8 @@ let baklist = [];
                 fullsizeMapSrc: '',
                 bossData: null,
                 filter_field: [],
-                mapDivStyle: {}
+                mapDivStyle: {},
+                ipSearchBoss: ''
             }
         },
         beforeCreate() {
@@ -109,7 +113,9 @@ let baklist = [];
                     this.$nextTick(()=>{
                         this.list = p.data.list;
                         this.onAlign(this.align);
-                    });
+
+                        this.onChangeSearchBoss();
+                    });                    
 
                     const ret = await Notification.requestPermission();
                     if( ret == 'denied') return;
@@ -160,7 +166,7 @@ let baklist = [];
             },
             onFullSizeMap(src, boss) {
                 const _img = new Image();
-                _img.onload = e=> {
+                _img.onload = ()=> {
                     const v = _img.width / _img.height;
                     _img.height = window.innerHeight * 0.85;
                     _img.width = _img.height * v;
@@ -216,6 +222,29 @@ let baklist = [];
             },
             getMapDivStyle() {
                 
+            },
+            onChangeSearchBoss() {
+                let bAll = true;
+                let _find = [];
+
+                if( this.ipSearchBoss.trim() == '') {
+                    this.list = baklist;
+                    return;
+                }
+
+                this.list.forEach(it=> {
+                    if( it.boss_name.indexOf(this.ipSearchBoss.trim()) != -1 ) {
+                        _find.push(it);
+                        bAll = false;
+                    }
+                })
+
+                if( bAll )  {
+                    this.list = baklist;
+                    return;
+                }
+
+                this.list = _find;
             }
         },
     }

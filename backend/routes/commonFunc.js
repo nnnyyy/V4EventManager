@@ -14,13 +14,18 @@ exports.GetUserInfo = function(req) {
         if( !req.session.userinfo ) rej(-101);
         else {
             try {
-                const pUserGuild = await db.query(`select * from user_guild where user_sn = ${req.session.userinfo.sn}`);
+                const pUserGuild = await db.query(`select * from user_guild u left join guild g on u.guild_sn = g.sn where user_sn = ${req.session.userinfo.sn}`);
                 if( pUserGuild.rows.length <= 0 ) throw -2;
                 const userGuildInfo = pUserGuild.rows[0];
+
+                const pUser = await db.query(`select nick from account where sn = ${req.session.userinfo.sn}`);
+                const nick = pUser.rows[0].nick;
 
                 let info = {
                     sn: req.session.userinfo.sn,
                     guild: userGuildInfo.guild_sn,
+                    guildname: userGuildInfo.guildname ? userGuildInfo.guildname : '',
+                    nick : nick,
                     grade: userGuildInfo.grade
                 }
                 res(info);                

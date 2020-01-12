@@ -22,6 +22,8 @@ export default {
           this.$store.state.auth = true;
           this.$store.state.state = userinfo.grade;
           this.$store.state.guild = userinfo.guild;
+          this.$store.state.guildname = userinfo.guildname;
+          this.$store.state.nick = userinfo.nick;
           if( this.$store.state.guild != -1 && 
               this.$store.state.state == 0 && 
               window.location.pathname != '/JoinGuild' ) {

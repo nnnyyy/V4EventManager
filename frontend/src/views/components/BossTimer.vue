@@ -1,19 +1,17 @@
 <template>    
-        <tr v-if="top" class="boss-timer root top">
-            <td>대륙명</td>
-            <td>지역명</td>
-            <td>필드</td>
-            <td>보스 이름</td>
-            <td>타입</td>
-            <td>쿨타임(분)</td>
-            <td>컷 시간</td>
-            <td>예상 젠 시간</td>
-            <td class="btn" @click="$emit('align', 'remain')">남은 시간</td>
-            <td>컷</td>
-            <td>즐겨찾기</td>
+        <tr v-if="top" class="boss-timer root top">            
+            <td style="width: 150px;">지역명</td>
+            <td style="width: 180px;">필드</td>
+            <td style="width: 130px;">보스 이름</td>
+            <td style="width: 150px;">타입</td>
+            <td style="min-width: 100px;">쿨타임(분)</td>
+            <td style="min-width: 150px;">컷 시간</td>
+            <td style="width: 150px;">예상 젠 시간</td>
+            <td style="width: 130px;" class="btn" @click="$emit('align', 'remain')">남은 시간</td>
+            <td style="width: 100px;">컷</td>
+            <td style="width: 100px;">즐겨찾기</td>
         </tr>
         <tr v-else class="boss-timer root">
-            <td>{{data.dimention_name}}</td>
             <td >{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 14px;">my_location</i></td>
@@ -236,7 +234,6 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
 <style lang="scss" scoped>
 .boss-timer.root td.alert { background-color: $cr-cancel; color: white; }
 .boss-timer.root:hover { background-color: #B2DFDB; }
-.boss-timer.root td.hasImage {  }
 .type-1 { color: blue; }
 .type-2 { color: purple; }
 </style>

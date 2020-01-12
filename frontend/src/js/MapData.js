@@ -1,4 +1,5 @@
 exports.MapData = {
+    "파멸의화산":{src:"/images/maps/map_파멸.jpg"},
     "데커스화산":{src:"/images/maps/map_데커스화산.jpg",
         marker:[
             {name:'베르키',x:85.0,y:41.1},
