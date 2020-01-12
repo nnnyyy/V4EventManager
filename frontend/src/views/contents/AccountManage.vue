@@ -61,6 +61,9 @@
                 <div class="table-type-1-fs">승인 대기자가 없습니다</div>
             </div>
         </div>
+        <div class="mgt-4">
+            <CustomBtn bg_cancel st=5 @listener="onDestroyGuild">길드 삭제</CustomBtn>
+        </div>
     </div>
 </PageBaseGuildMasterOnly>    
 </template>
@@ -156,6 +159,15 @@
                 } catch (e) {
                     alert(e);                    
                 }
+            },
+            async onDestroyGuild() {
+                if( !confirm('길드를 삭제하시겠습니까?') ) return;
+
+                if( !confirm('정말 삭제하시겠습니까? 모든 데이터가 지워집니다') ) return;
+
+                await this.axios.post('/guild/destroy');
+
+                window.location.href = '/';
             }
         },        
     }

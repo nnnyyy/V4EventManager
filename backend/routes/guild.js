@@ -338,3 +338,32 @@ exports.secession = async (req, res)=> {
         ErrorProc(res, e);        
     }
 }
+
+exports.destroyGuild = async (req, res)=> {
+    let conn = null;
+    try {
+        const userinfo = await GetUserInfo(req);
+        if( userinfo.grade != 3 ) throw -1;
+
+        conn = await db.beginTran();
+
+        const pUserGuild = await db.queryTran(conn, `select * from user_guild where guild_sn = ${userinfo.guild}`);
+        const guildUsers = pUserGuild.rows;
+        for( let idx in guildUsers ) {
+            const user = guildUsers[idx];
+            await db.queryTran(conn, `update user_guild set guild_sn = ${-1}, grade = 0 where user_sn = ${user.user_sn}`);
+        }
+
+        await db.queryTran(conn, `delete from cuttime where guild_sn = ${userinfo.guild}`);
+        await db.queryTran(conn, `delete from guildlog where guild_sn = ${userinfo.guild}`);
+
+        await db.queryTran(conn, `delete from guild where sn = ${userinfo.guild}`);
+        
+        await db.endTran(conn);
+
+        res.send({ret: 0});        
+    } catch (e) {
+        db.rollback(conn);
+        ErrorProc(res, e);        
+    }
+}

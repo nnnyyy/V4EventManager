@@ -24,3 +24,4 @@ router.post('/guild/changeGrade', guild.changeGrade);
 router.post('/guild/kickUser', guild.kickUser);
 router.post('/guild/loadLogs', guild.loadLogs);
 router.post('/guild/secession', guild.secession);
+router.post('/guild/destroy', guild.destroyGuild);

@@ -31,6 +31,7 @@
 import BossTimer from '../components/BossTimer';
 let mFilterField = new Map();
 let baklist = [];
+let reloadTimeIndex = -1;
     export default {
         components: {
             BossTimer
@@ -53,6 +54,11 @@ let baklist = [];
         created () {
             setInterval(this.update, 100);
             this.loadEvent();
+            window.onresize = ()=> {
+                this.list = [];
+                clearTimeout(reloadTimeIndex);
+                reloadTimeIndex = setTimeout(()=>this.list=baklist, 300);
+            }
         },
         mounted() {
         },
