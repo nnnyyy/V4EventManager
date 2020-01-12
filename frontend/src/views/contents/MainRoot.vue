@@ -116,16 +116,14 @@ let reloadTimeIndex = -1;
                         }
                     });
 
-                    Array.from(mFilterField.keys()).forEach(it=>{
-                        this.filter_field.push(mFilterField.get(it));
-                    })
-
                     this.$nextTick(()=>{
-                        this.list = p.data.list;
-                        this.align = localStorage.getItem('align') || '';
-                        this.onAlign(this.align);
-
                         this.onChangeSearchBoss();
+                        
+                        this.list = p.data.list;
+                        
+                        this.align = localStorage.getItem('align') || '';
+
+                        this.onAlign(this.align, true);
                     });                    
 
                     //const ret = await Notification.requestPermission();
@@ -151,13 +149,13 @@ let reloadTimeIndex = -1;
                     "top": `${boss.y}%`
                 }
             },
-            onAlign(type) {
-                if( this.align == type ) type = '';
+            onAlign(type, bInit) {
+                if( !bInit && this.align == type ) type = '';
                 else if(!type) type = this.align;
                 this.align = type;
 
                 localStorage.setItem('align', this.align);
-                
+
                 switch(type){
                     case 'remain': 
                     this.list.sort((a,b)=> {
@@ -169,7 +167,7 @@ let reloadTimeIndex = -1;
                         return a.remain -  b.remain;
                     });
                     break;
-                    default: 
+                    default:                   
                     this.list.sort((a,b)=> {
                         if(a.favorite && !b.favorite) return -1;
                         if(!a.favorite && b.favorite) return 1;
@@ -201,7 +199,7 @@ let reloadTimeIndex = -1;
             onClickFullSizeImage(e) {                
                 e.stopPropagation();
             },
-            onChangeFieldFilter() {                
+            onChangeFieldFilter() {
                 let bAll = true;
                 this.filter_field.forEach(it=>{
                     if( it.check ) bAll = false;
