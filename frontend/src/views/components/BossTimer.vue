@@ -1,4 +1,4 @@
-<template>        
+<template>
         <tr v-if="top" class="boss-timer root top">
             <template v-if="!$store.state.isMobileSize">
                 <td style="width: 150px;">지역명</td>            
@@ -21,6 +21,7 @@
             </template>
         </tr>
         <tr v-else class="boss-timer root">
+            <PermanentWnd v-show="true">dfdf</PermanentWnd>
             <td v-if="!$store.state.isMobileSize">{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td v-if="!$store.state.isMobileSize" :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 14px;">my_location</i></td>
@@ -33,13 +34,8 @@
                 </div>
                 <div v-else class="btn" @click="onMode('modifyCooltime')">{{getCooltime(data.gaptimemin)}}</div>                
             </td>
-            <td style="text-align: center;">
-                <div class="f-row" v-if="modifyCuttime">
-                    <div><vue-timepicker input-width="80px" format="HH:mm" v-model="cuttime"></vue-timepicker></div>
-                    <div class="mgl-1"><CustomBtn bg_confirm @listener="onModifyCutTime">수정</CustomBtn></div>
-                    <div class="mgl-1"><CustomBtn bg_cancel @listener="onCancelModifyCutTime">취소</CustomBtn> </div>
-                </div>
-                <div v-else>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i></div>
+            <td style="text-align: center;">                
+                <div>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i></div>
             </td>
             <td v-if="!$store.state.isMobileSize" style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
             <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
@@ -50,12 +46,9 @@
 
 <script>
 import { MapData } from '@/js/MapData';
-import VueTimepicker from 'vue2-timepicker';
-import 'vue2-timepicker/dist/VueTimepicker.css';
 
     export default {
-        components: {
-            VueTimepicker,
+        components: {            
         },
         props: ['data', 'top'],
         data() {
@@ -169,11 +162,8 @@ import 'vue2-timepicker/dist/VueTimepicker.css';
                         alert('지금 컷을 한번 실행 후 수정해주세요.');
                         return;
                     }
-                    this.modifyCuttime = true;
-                    this.$nextTick(()=> {
-                        this.cuttime.HH = this.$moment(this.data.cuttime).format('HH');
-                        this.cuttime.mm = this.$moment(this.data.cuttime).format('mm');
-                    })                    
+
+                    this.$emit('modifyCut', this.data);                                        
                 }
 
                 if( mode == 'modifyCooltime') {
