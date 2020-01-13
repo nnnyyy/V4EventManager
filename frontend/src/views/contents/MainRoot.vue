@@ -187,7 +187,7 @@ let reloadTimeIndex = -1;
                         
                         this.list = p.data.list;
                         
-                        const alignState = JSON.parse(localStorage.getItem('align') || JSON.stringify({ type: '', state: 0}));
+                        const alignState = this.G.getAlignState();
 
                         this.onAlign(alignState);
 
