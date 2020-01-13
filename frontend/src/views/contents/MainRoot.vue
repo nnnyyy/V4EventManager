@@ -129,9 +129,9 @@ let reloadTimeIndex = -1;
                         
                         this.list = p.data.list;
                         
-                        this.align = localStorage.getItem('align') || '';
+                        const alignState = JSON.parse(localStorage.getItem('align') || "{ type: '', state: 0}");
 
-                        this.onAlign(this.align, true);
+                        this.onAlign(alignState);
                     });                    
 
                     //const ret = await Notification.requestPermission();
@@ -157,22 +157,39 @@ let reloadTimeIndex = -1;
                     "top": `${boss.y}%`
                 }
             },
-            onAlign(type, bInit) {
-                if( !bInit && this.align == type ) type = '';
-                else if(!type) type = this.align;
-                this.align = type;
+            onAlign(alignState) {
+                if( !alignState ) {
+                   alignState = JSON.parse(localStorage.getItem('align') || "{ type: '', state: 0}"); 
+                }
+                localStorage.setItem('align', JSON.stringify(alignState));
 
-                localStorage.setItem('align', this.align);
-
-                switch(type){
+                switch(alignState.type){
                     case 'remain': 
                     this.list.sort((a,b)=> {
                         if(a.favorite && !b.favorite) return -1;
                         if(!a.favorite && b.favorite) return 1;
 
-                        if(a.remain == -1 ) return 1;
-                        if(b.remain == -1 ) return -1;
+                        if(a.remain == -1 ) return alignState.state == 1 ? 1 : -1;
+                        if(b.remain == -1 ) return alignState.state == 1 ? -1 : 1;
                         return a.remain -  b.remain;
+                    });
+                    break;
+                    case 'bossname': 
+                    this.list.sort((a,b)=> {
+                        if(a.favorite && !b.favorite) return -1;
+                        if(!a.favorite && b.favorite) return 1;
+
+                        if(a.boss_name > b.boss_name ) return alignState.state == 1 ? 1 : -1;
+                        else return alignState.state == 1 ? -1 : 1;
+                    });
+                    break;
+                    case 'field': 
+                    this.list.sort((a,b)=> {
+                        if(a.favorite && !b.favorite) return -1;
+                        if(!a.favorite && b.favorite) return 1;
+
+                        if(a.field_name > b.field_name ) return alignState.state == 1 ? 1 : -1;
+                        else return alignState.state == 1 ? -1 : 1;
                     });
                     break;
                     default:                   

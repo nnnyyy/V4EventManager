@@ -2,13 +2,13 @@
         <tr v-if="top" class="boss-timer root top">
             <template v-if="!$store.state.isMobileSize">
                 <td style="width: 150px;">지역명</td>            
-                <td style="width: 180px;">필드</td>
-                <td style="width: 130px;">보스 이름</td>
+                <td :class="[getAlignCls('field')]" style="width: 180px;" class="btn" @click="onAlign('field')">필드</td>
+                <td :class="[getAlignCls('bossname')]" style="width: 130px;" class="btn" @click="onAlign('bossname')">보스</td>
                 <td style="width: 150px;">타입</td>
                 <td style="min-width: 100px;">쿨타임(분)</td>
                 <td style="min-width: 150px;">컷 시간</td>
                 <td style="width: 150px;">예상 젠 시간</td>
-                <td style="width: 130px;" class="btn" @click="$emit('align', 'remain')">남은 시간</td>
+                <td :class="[getAlignCls('remain')]" style="width: 130px;" class="btn" @click="onAlign('remain')">남은 시간</td>
                 <td style="width: 100px;">컷</td>
                 <td style="width: 100px;">즐겨찾기</td>
             </template>            
@@ -53,6 +53,10 @@ import { MapData } from '@/js/MapData';
         props: ['data', 'top'],
         data() {
             return {
+                alignState: {
+                    type: '',
+                    state: 0
+                },
                 modifyCuttime: false,
                 cuttime: {
                     HH: '03',
@@ -225,7 +229,29 @@ import { MapData } from '@/js/MapData';
             },
             onFavorite() {
                 this.$emit('onFavorite');
-            }            
+            },
+            onAlign(type) {
+                if( this.alignState.type == type ) {
+                    this.alignState.state++;
+                    if( this.alignState.state % 3 == 0 ) {
+                        this.alignState.type = '';
+                        this.alignState.state = 0;
+                    }
+                }
+                else {
+                    this.alignState.type = type;
+                    this.alignState.state = 1;
+                }
+                this.$emit('align', this.alignState)
+            },
+            getAlignCls(type) {
+                if( type == this.alignState.type )  {                    
+                    if( this.alignState.state == 1 ) return 'aligned';
+                    else return 'aligned-reverse';
+                }
+
+                return '';
+            }
         },
     }
 </script>
@@ -235,4 +261,8 @@ import { MapData } from '@/js/MapData';
 .boss-timer.root:hover { background-color: #B2DFDB; }
 .type-1 { color: blue; }
 .type-2 { color: purple; }
+.boss-timer.root td.aligned { background-color: $cr-primary-3; }
+.boss-timer.root td.aligned::after { content: ' ▼' }
+.boss-timer.root td.aligned-reverse { background-color: $cr-primary-3; }
+.boss-timer.root td.aligned-reverse::after { content: ' ▲' }
 </style>
