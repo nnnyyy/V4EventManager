@@ -357,7 +357,12 @@ let reloadTimeIndex = -1;
                 }
 
                 baklist.forEach(it=> {
-                    if( this.selArea == it.area_name || this.selField == it.field_name || this.selBoss == it.boss_name || this.selType == it.type ) {
+                    const bFind =   ( this.selArea == '' ? true : this.selArea == it.area_name ) &&
+                                    ( this.selField == '' ? true : this.selField == it.field_name ) &&
+                                    ( this.selBoss == '' ? true : this.selBoss == it.boss_name ) &&
+                                    ( this.selType == '' ? true : this.selType == it.type );
+
+                    if( bFind ) {
                         _find.push(it);
                         bAll = false;
                     }
