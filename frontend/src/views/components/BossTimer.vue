@@ -67,6 +67,7 @@ import { MapData } from '@/js/MapData';
             }
         },
         created () {
+            this.alignState = JSON.parse(localStorage.getItem('align') || "{ type: '', state: 0}"); 
         },
         methods: {
             getTypeName(type) {

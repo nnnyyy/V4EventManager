@@ -13,6 +13,26 @@
             <div v-if="!$store.state.isMobileSize" class="f-row f-ac pdb-2">
                 <div class="mgr-3">보스 검색</div>
                 <input class="type-1" type="text" v-model="ipSearchBoss" @keyup="onChangeSearchBoss">
+                <div class="mgw-3">지역</div>
+                <select v-model="selArea" @change="onFilterChange">
+                    <option value="">모두보기</option>
+                    <option :key="idx" v-for="(it,idx) in areaList" :value="it">{{it}}</option>
+                </select>
+                <div class="mgw-3">필드</div>
+                <select v-model="selField" @change="onFilterChange">
+                    <option value="">모두보기</option>
+                    <option :key="idx" v-for="(it,idx) in fieldList" :value="it">{{it}}</option>
+                </select>
+                <div class="mgw-3">보스</div>
+                <select v-model="selBoss" @change="onFilterChange">
+                    <option value="">모두보기</option>
+                    <option :key="idx" v-for="(it,idx) in bossList" :value="it">{{it}}</option>
+                </select>
+                <div class="mgw-3">타입</div>
+                <select v-model="selType" @change="onFilterChange">
+                    <option value="">모두보기</option>
+                    <option :key="idx" v-for="(it,idx) in typeList" :value="it">{{getTypeName(it)}}</option>
+                </select>
             </div>
             <div v-show="false" class="f-row f-wrap">
                 <div class="pda-1" style="width: 160px;" :key="idx" v-for="(it,idx) in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
@@ -53,7 +73,17 @@ let reloadTimeIndex = -1;
                 bossData: null,
                 filter_field: [],
                 mapDivStyle: {},
-                ipSearchBoss: ''
+                ipSearchBoss: '',
+                
+                areaList: [],
+                fieldList: [],
+                bossList: [],
+                typeList: [],
+
+                selArea: '',
+                selField: '',
+                selBoss: '',
+                selType: ''
             }
         },
         beforeCreate() {
@@ -110,8 +140,17 @@ let reloadTimeIndex = -1;
                     const mFavorite = new Map();
                     _f.forEach(sn=>mFavorite.set(sn));
 
+                    const stArea = new Set();
+                    const stField = new Set();
+                    const stBoss = new Set();
+                    const stType = new Set();
+
                     p.data.list.forEach(it=> {
                         baklist.push(it);
+                        stArea.add(it.area_name);
+                        stField.add(it.field_name);
+                        stBoss.add(it.boss_name);
+                        stType.add(it.type);
                         if( it.gaptimemin <= 0 ) it.gaptimemin = it.term;
                         mFilterField.set(it.field_name, {name: it.field_name, check: false});
                         it.favorite = mFavorite.has(it.sn) ? true : false;
@@ -123,6 +162,11 @@ let reloadTimeIndex = -1;
                             it.remain = remain;
                         }
                     });
+
+                    this.areaList = Array.from(stArea.keys());
+                    this.fieldList = Array.from(stField.keys());
+                    this.bossList = Array.from(stBoss.keys());
+                    this.typeList = Array.from(stType.keys());
 
                     this.$nextTick(()=>{
                         this.onChangeSearchBoss();
@@ -287,7 +331,7 @@ let reloadTimeIndex = -1;
                     return;
                 }
 
-                this.list.forEach(it=> {
+                baklist.forEach(it=> {
                     if( it.boss_name.indexOf(this.ipSearchBoss.trim()) != -1 ) {
                         _find.push(it);
                         bAll = false;
@@ -300,7 +344,35 @@ let reloadTimeIndex = -1;
                 }
 
                 this.list = _find;
-            } 
+            },
+            onFilterChange() {
+                let bAll = true;
+                let _find = [];
+
+                this.ipSearchBoss = '';
+
+                if( this.selArea == '' && this.selField == '' && this.selBoss == '' && this.selType == '') {
+                    this.list = baklist;
+                    return;
+                }
+
+                baklist.forEach(it=> {
+                    if( this.selArea == it.area_name || this.selField == it.field_name || this.selBoss == it.boss_name || this.selType == it.type ) {
+                        _find.push(it);
+                        bAll = false;
+                    }
+                })
+
+                if( bAll )  {
+                    this.list = baklist;
+                    return;
+                }
+
+                this.list = _find;                
+            },
+            getTypeName(type) {
+                return type == 1 ? "특수 네임드(불완전)" : "일반 네임드"
+            }
         },
     }
 </script>
