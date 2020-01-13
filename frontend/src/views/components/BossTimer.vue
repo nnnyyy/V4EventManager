@@ -163,7 +163,7 @@ import { MapData } from '@/js/MapData';
                         return;
                     }
 
-                    this.$emit('modifyCut', this.data);                                        
+                    this.$EventBus.$emit('modifyCut', this.data);
                 }
 
                 if( mode == 'modifyCooltime') {
@@ -225,7 +225,7 @@ import { MapData } from '@/js/MapData';
             },
             onFavorite() {
                 this.$emit('onFavorite');
-            }
+            }            
         },
     }
 </script>
