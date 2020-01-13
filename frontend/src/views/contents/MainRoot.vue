@@ -187,11 +187,11 @@ let reloadTimeIndex = -1;
                         
                         this.list = p.data.list;
                         
-                        const alignState = this.G.getAlignState();
-
-                        this.onAlign(alignState);
+                        const alignState = this.G.getAlignState();                        
 
                         this.onFilterChange();
+
+                        this.onAlign(alignState);
                     });                    
 
                     //const ret = await Notification.requestPermission();
@@ -217,13 +217,12 @@ let reloadTimeIndex = -1;
                     "top": `${boss.y}%`
                 }
             },
-            onAlign(alignState) {
-                if( !alignState ) {
-                    
+            onAlign(alignState) {                
+                if( !alignState ) {                    
                    alignState = this.G.getAlignState();
                 }
+
                 this.G.saveAlignState(alignState);
-                localStorage.setItem('align', JSON.stringify(alignState));
 
                 switch(alignState.type){
                     case 'remain': 
@@ -272,11 +271,11 @@ let reloadTimeIndex = -1;
                         else return alignState.state == 1 ? -1 : 1;
                     });
                     break;
-                    default:                   
+                    default:
                     this.list.sort((a,b)=> {
                         if(a.favorite && !b.favorite) return -1;
                         if(!a.favorite && b.favorite) return 1;
-                        return a.sn - b.sn;
+                        return Number(a.sn) - Number(b.sn);
                     })
                     break;
                 }                

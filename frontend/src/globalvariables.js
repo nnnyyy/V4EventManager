@@ -90,9 +90,9 @@ class GlobalVariables {
 
     getAlignState() {
         const a = localStorage.getItem('align');
-        try {
-            const _parse = JSON.parse(a);
-            if( !_parse.type ) throw -1;
+        try {            
+            const _parse = JSON.parse(a);            
+            if( _parse.type == 'undefined' ) throw -1;
             return _parse;
         } catch (e) {
             return { type: 'remain', state: 1 };
@@ -100,7 +100,7 @@ class GlobalVariables {
     }
 
     saveAlignState(obj) {
-        localStorage.setItem('align', obj);
+        localStorage.setItem('align', JSON.stringify(obj));
     }
 }
 
