@@ -93,7 +93,7 @@ class GlobalVariables {
         try {
             const _parse = JSON.parse(a);
             if( !_parse.type ) throw -1;
-            return { type: 'remain', state: 1 };
+            return _parse;
         } catch (e) {
             return { type: 'remain', state: 1 };
         }
