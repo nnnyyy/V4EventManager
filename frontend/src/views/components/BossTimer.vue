@@ -1,10 +1,10 @@
 <template>
         <tr v-if="top" class="boss-timer root top">
             <template v-if="!$store.state.isMobileSize">
-                <td style="width: 150px;">지역명</td>            
+                <td :class="[getAlignCls('area')]" style="width: 150px;" class="btn" @click="onAlign('area')">지역</td>
                 <td :class="[getAlignCls('field')]" style="width: 180px;" class="btn" @click="onAlign('field')">필드</td>
                 <td :class="[getAlignCls('bossname')]" style="width: 130px;" class="btn" @click="onAlign('bossname')">보스</td>
-                <td style="width: 150px;">타입</td>
+                <td :class="[getAlignCls('bosstype')]" style="width: 150px;" class="btn" @click="onAlign('bosstype')">타입</td>
                 <td style="min-width: 100px;">쿨타임(분)</td>
                 <td style="min-width: 150px;">컷 시간</td>
                 <td style="width: 150px;">예상 젠 시간</td>
@@ -21,7 +21,6 @@
             </template>
         </tr>
         <tr v-else class="boss-timer root">
-            <PermanentWnd v-show="true">dfdf</PermanentWnd>
             <td v-if="!$store.state.isMobileSize">{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td v-if="!$store.state.isMobileSize" :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 14px;">my_location</i></td>

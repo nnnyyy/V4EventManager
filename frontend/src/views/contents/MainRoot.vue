@@ -191,6 +191,24 @@ let reloadTimeIndex = -1;
                         if(a.field_name > b.field_name ) return alignState.state == 1 ? 1 : -1;
                         else return alignState.state == 1 ? -1 : 1;
                     });
+                    break;                    
+                    case 'area': 
+                    this.list.sort((a,b)=> {
+                        if(a.favorite && !b.favorite) return -1;
+                        if(!a.favorite && b.favorite) return 1;
+
+                        if(a.area_name > b.area_name ) return alignState.state == 1 ? 1 : -1;
+                        else return alignState.state == 1 ? -1 : 1;
+                    });
+                    break;
+                    case 'bosstype': 
+                    this.list.sort((a,b)=> {
+                        if(a.favorite && !b.favorite) return -1;
+                        if(!a.favorite && b.favorite) return 1;
+
+                        if( a.type > b.type ) return alignState.state == 1 ? 1 : -1;
+                        else return alignState.state == 1 ? -1 : 1;
+                    });
                     break;
                     default:                   
                     this.list.sort((a,b)=> {
