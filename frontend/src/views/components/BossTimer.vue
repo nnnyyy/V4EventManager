@@ -13,9 +13,9 @@
                 <td style="width: 100px;">즐겨찾기</td>
             </template>            
             <template v-else>
-                <td>보스 이름</td>                
+                <td :class="[getAlignCls('bossname')]" class="btn" @click="onAlign('bossname')">보스</td>        
                 <td>컷 시간</td>                
-                <td style="width: 130px;" class="btn" @click="$emit('align', 'remain')">남은 시간</td>
+                <td :class="[getAlignCls('remain')]" style="width: 130px;" class="btn" @click="onAlign('remain')">남은 시간</td>
                 <td style="width: 100px;">컷</td>
                 <td style="width: 100px;">즐겨찾기</td>                
             </template>
@@ -67,7 +67,7 @@ import { MapData } from '@/js/MapData';
             }
         },
         created () {
-            this.alignState = JSON.parse(localStorage.getItem('align') || JSON.stringify({ type: '', state: 0 }));
+            this.alignState = this.G.getAlignState();
         },
         methods: {
             getTypeName(type) {

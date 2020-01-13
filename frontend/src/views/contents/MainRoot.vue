@@ -140,7 +140,7 @@ let reloadTimeIndex = -1;
             async loadEvent() {
                 try {
                     this.selChannel = this.G.getCurrentChannel(this);
-                    
+
                     const p = await this.axios.post('/guild/loadBossEvent', {ch: this.selChannel});
                     if(p.data.ret != 0) throw p.data.ret;
                     this.list = [];           
@@ -219,8 +219,10 @@ let reloadTimeIndex = -1;
             },
             onAlign(alignState) {
                 if( !alignState ) {
-                   alignState = JSON.parse(localStorage.getItem('align') || "{ type: '', state: 0}"); 
+                    
+                   alignState = this.G.getAlignState();
                 }
+                this.G.saveAlignState(alignState);
                 localStorage.setItem('align', JSON.stringify(alignState));
 
                 switch(alignState.type){

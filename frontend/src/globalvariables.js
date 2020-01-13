@@ -87,6 +87,21 @@ class GlobalVariables {
             return { area: '', field: '', boss: '', type: '' }
         }
     }
+
+    getAlignState() {
+        const a = localStorage.getItem('align');
+        try {
+            const _parse = JSON.parse(a);
+            if( !_parse.type ) throw -1;
+            return { type: 'remain', state: 1 };
+        } catch (e) {
+            return { type: 'remain', state: 1 };
+        }
+    }
+
+    saveAlignState(obj) {
+        localStorage.setItem('align', obj);
+    }
 }
 
 const _obj = new GlobalVariables();
