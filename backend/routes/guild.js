@@ -35,11 +35,12 @@ exports.loadBossEvent = async (req,res)=> {
     try {
         const userinfo = await GetUserInfo(req);
         const guildSN = userinfo.guild;
+        const channel = req.body.ch;
         if( guildSN == -1 ) throw -1;
         let p = await db.query(`select * from user_guild where user_sn = ${userinfo.sn}`);
         if( p.rows[0].grade == 0 ) throw -2;
 
-        p = await db.query(`select b.*, ifnull(c.boss_sn, -1) boss_sn, ifnull(c.cuttime,0) cuttime, ifnull(c.gaptimemin, 0) gaptimemin from boss b left join (select * from cuttime where guild_sn = ${guildSN}) c on b.sn = c.boss_sn`);
+        p = await db.query(`select b.*, ifnull(c.boss_sn, -1) boss_sn, ifnull(c.cuttime,0) cuttime, ifnull(c.gaptimemin, 0) gaptimemin from boss b left join (select * from cuttime where guild_sn = ${guildSN} and channel = ${channel}) c on b.sn = c.boss_sn`);
 
         res.send({ret: 0, list: p.rows});
     } catch (e) {
@@ -55,21 +56,22 @@ exports.cut = async (req,res)=> {
         const userinfo = await GetUserInfo(req);
         const guildSN = userinfo.guild;
         const userSN = userinfo.sn;
+        const channel = req.body.ch;
 
         if( userinfo.grade < 2 ) throw -1;
 
         const boss = await db.query(`select * from boss where sn = ${sn}`);
         const bossinfo = boss.rows[0];
 
-        const p = await db.query(`select * from cuttime where guild_sn = ${guildSN} and boss_sn = ${sn}`);
+        const p = await db.query(`select * from cuttime where guild_sn = ${guildSN} and boss_sn = ${sn} and channel = ${channel}`);
         if( p.rows.length <= 0 ) {
-            await db.query(`insert into cuttime (guild_sn, boss_sn, cuttime, gaptimemin) values (${guildSN}, ${sn}, now(), ${bossinfo.term})`);
+            await db.query(`insert into cuttime (guild_sn, boss_sn, cuttime, gaptimemin, channel) values (${guildSN}, ${sn}, now(), ${bossinfo.term}, ${channel})`);
         }
         else {
-            await db.query(`update cuttime set cuttime = now() where guild_sn = ${guildSN} and boss_sn = ${sn}`);
+            await db.query(`update cuttime set cuttime = now() where guild_sn = ${guildSN} and boss_sn = ${sn} and channel = ${channel}`);
         }
 
-        await _WriteGuildLog(guildSN, userSN, `${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷을 입력 했습니다`);
+        await _WriteGuildLog(guildSN, userSN, `${channel}채널 - ${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷을 입력 했습니다`);
 
         res.send({ret: 0});
         
@@ -108,15 +110,16 @@ exports.modifyCutTime = async (req, res)=> {
         const guildSN = userinfo.guild;
         const userSN = userinfo.sn;
         const modifydate = req.body.modifydate;
+        const channel = req.body.ch;
 
         if( userinfo.grade < 2 ) throw -1;
 
         const boss = await db.query(`select * from boss where sn = ${sn}`);
         const bossinfo = boss.rows[0];
 
-        await db.query(`update cuttime set cuttime = '${modifydate}' where guild_sn = ${guildSN} and boss_sn = ${sn}`);
+        await db.query(`update cuttime set cuttime = '${modifydate}' where guild_sn = ${guildSN} and boss_sn = ${sn} and channel = ${channel}`);
 
-        await _WriteGuildLog(guildSN, userSN, `${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷 시간을 ${moment(modifydate).format('YYYY/MM/DD HH:mm:ss')} 로 수정 했습니다`);
+        await _WriteGuildLog(guildSN, userSN, `채널 ${channel} - ${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷 시간을 ${moment(modifydate).format('YYYY/MM/DD HH:mm:ss')} 로 수정 했습니다`);
 
         res.send({ret: 0});
     } catch (e) {

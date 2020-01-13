@@ -13,6 +13,10 @@
             <div v-if="!$store.state.isMobileSize" class="f-row f-ac pdb-2">
                 <div class="mgr-3">보스 검색</div>
                 <input class="type-1" type="text" v-model="ipSearchBoss" @keyup="onChangeSearchBoss">
+                <div class="mgw-3">채널</div>
+                <select v-model="selChannel" @change="onChannelChange">
+                    <option :key="idx" v-for="(it,idx) in 10" :value="it">{{it}}</option>
+                </select>
                 <div class="mgw-3">지역</div>
                 <select v-model="selArea" @change="onFilterChange">
                     <option value="">모두보기</option>
@@ -83,13 +87,21 @@ let reloadTimeIndex = -1;
                 selArea: '',
                 selField: '',
                 selBoss: '',
-                selType: ''
+                selType: '',
+                selChannel: '1'
             }
         },
         beforeCreate() {
         },
         created () {
             setInterval(this.update, 100);
+            
+            const filter = this.G.getFilter();
+            this.selArea = filter.area;
+            this.selField = filter.field;
+            this.selBoss = filter.boss;
+            this.selType = filter.type;
+
             this.loadEvent();
             window.onresize = ()=> {
                 this.list = [];
@@ -127,12 +139,14 @@ let reloadTimeIndex = -1;
             },
             async loadEvent() {
                 try {
-                    const p = await this.axios.post('/guild/loadBossEvent');
+                    this.selChannel = this.G.getCurrentChannel(this);
+                    
+                    const p = await this.axios.post('/guild/loadBossEvent', {ch: this.selChannel});
                     if(p.data.ret != 0) throw p.data.ret;
                     this.list = [];           
                     this.filter_field = [];
                     baklist = [];
-                    mFilterField = new Map();
+                    mFilterField = new Map();                    
 
                     let _f = localStorage.getItem(`favorite${this.$store.state.guild}`);
                     if( !_f ) _f = [];
@@ -173,9 +187,11 @@ let reloadTimeIndex = -1;
                         
                         this.list = p.data.list;
                         
-                        const alignState = JSON.parse(localStorage.getItem('align') || "{ type: '', state: 0}");
+                        const alignState = JSON.parse(localStorage.getItem('align') || JSON.stringify({ type: '', state: 0}));
 
                         this.onAlign(alignState);
+
+                        this.onFilterChange();
                     });                    
 
                     //const ret = await Notification.requestPermission();
@@ -346,6 +362,8 @@ let reloadTimeIndex = -1;
                 this.list = _find;
             },
             onFilterChange() {
+                this.G.saveFilter(this.selArea, this.selField, this.selBoss, this.selType);
+
                 let bAll = true;
                 let _find = [];
 
@@ -377,6 +395,11 @@ let reloadTimeIndex = -1;
             },
             getTypeName(type) {
                 return type == 1 ? "특수 네임드(불완전)" : "일반 네임드"
+            },
+            onChannelChange() {
+                this.G.saveChannel(this, this.selChannel);
+                this.list = [];
+                this.$nextTick(()=>this.loadEvent());
             }
         },
     }

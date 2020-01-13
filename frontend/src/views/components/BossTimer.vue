@@ -67,7 +67,7 @@ import { MapData } from '@/js/MapData';
             }
         },
         created () {
-            this.alignState = JSON.parse(localStorage.getItem('align') || "{ type: '', state: 0}"); 
+            this.alignState = JSON.parse(localStorage.getItem('align') || JSON.stringify({ type: '', state: 0 }));
         },
         methods: {
             getTypeName(type) {
@@ -89,7 +89,7 @@ import { MapData } from '@/js/MapData';
 
                     if( !confirm('현재 시간으로 컷을 입력하시겠습니까? 입력 후 수정 가능합니다.') ) return;
 
-                    await this.axios.post('/guild/cut', {boss_sn: this.data.sn});
+                    await this.axios.post('/guild/cut', {boss_sn: this.data.sn, ch: this.G.getCurrentChannel(this)});
                     this.$emit('onCut');
                 } catch (e) {
                     alert(e);                    
@@ -180,24 +180,7 @@ import { MapData } from '@/js/MapData';
                         this.cooltime = this.data.gaptimemin;
                     })                    
                 }
-            },
-            async onModifyCutTime() {
-                try {
-                    const yesterday = Number(this.$moment(Date.now()).format('HH')) < Number(this.cuttime.HH);
-                    let now = new Date();
-                    if( yesterday ) now.setDate(now.getDate() - 1);
-
-                    now.setHours(this.cuttime.HH);
-                    now.setMinutes(this.cuttime.mm);
-                    console.log(this.$moment(now).format('YYYY-MM-DD HH:mm'));
-                    await this.axios.post('/guild/modifyCutTime', {boss_sn: this.data.sn, modifydate: this.$moment(now).format('YYYY-MM-DD HH:mm') });
-                    this.$emit('onCut');
-                } catch (e) {
-                    alert(e);                    
-                } finally {
-                    this.modifyCuttime = false;
-                }
-            },
+            },            
             onCancelModifyCutTime() {
                 this.modifyCuttime = false;
             },

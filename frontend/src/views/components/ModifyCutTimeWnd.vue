@@ -56,7 +56,7 @@
                     }
 
                     const modifyDate = this.$moment(d).format('YYYY-MM-DD HH:mm:ss');
-                    const p = await this.axios.post('/guild/modifyCutTime', {boss_sn: this.modifyData.sn, modifydate: modifyDate });
+                    const p = await this.axios.post('/guild/modifyCutTime', {boss_sn: this.modifyData.sn, modifydate: modifyDate, ch: 1 });
                     if( p.data.ret != 0 ) throw p.data.ret;
 
                     this.$EventBus.$emit('modifyCutComplete');

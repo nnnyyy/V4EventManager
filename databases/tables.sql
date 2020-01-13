@@ -283,5 +283,8 @@ create table cuttime (
     primary key (guild_sn, boss_sn)
 ) DEFAULT CHARSET=utf8;
 
+alter table cuttime add column channel int default 1;
+alter table cuttime add index ix_ch ( channel );
+
 select b.*, ifnull(c.boss_sn, -1) boss_sn, ifnull(c.cuttime,0) cuttime, ifnull(c.gaptimemin, 0) gaptimemin from boss b left join (select * from cuttime where guild_sn = 1) c on b.sn = c.boss_sn;
   

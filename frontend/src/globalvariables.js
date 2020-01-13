@@ -64,6 +64,29 @@ class GlobalVariables {
         n = n + '';
         return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
     }
+
+    getCurrentChannel(v) {
+        return localStorage.getItem(`${v.$store.state.guild}-cur-ch`) || "1";
+    }
+
+    saveChannel(v,ch) {
+        localStorage.setItem(`${v.$store.state.guild}-cur-ch`, ch);
+    }
+
+    saveFilter(area, field, boss, type) {
+        localStorage.setItem(`filter`, JSON.stringify({area: area, field: field, boss: boss, type: type}));
+    }
+
+    getFilter() {
+        const f = localStorage.getItem(`filter`);
+        if( !f ) return { area: '', field: '', boss: '', type: '' }
+        try {
+            const _parse = JSON.parse(f);
+            return _parse;
+        } catch(e) {
+            return { area: '', field: '', boss: '', type: '' }
+        }
+    }
 }
 
 const _obj = new GlobalVariables();
