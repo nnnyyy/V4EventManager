@@ -13,15 +13,15 @@
                 <td style="width: 100px;">즐겨찾기</td>
             </template>            
             <template v-else>
-                <td :class="[getAlignCls('bossname')]" class="btn" @click="onAlign('bossname')">보스</td>        
-                <td>컷 시간</td>                
-                <td :class="[getAlignCls('remain')]" style="width: 130px;" class="btn" @click="onAlign('remain')">남은 시간</td>
-                <td style="width: 100px;">컷</td>
-                <td style="width: 100px;">즐겨찾기</td>                
+                <td :class="[getAlignCls('area')]" class="btn" @click="onAlign('area')">지역</td>
+                <td :class="[getAlignCls('bossname')]" class="btn" @click="onAlign('bossname')">보스</td>                
+                <td :class="[getAlignCls('remain')]" style="width: 160px;" class="btn" @click="onAlign('remain')">컷 시간 <br/> 남은 시간</td>
+                <td style="width: 80px;">컷</td>
+                <td style="width: 50px;">즐겨찾기</td>                
             </template>
         </tr>
         <tr v-else class="boss-timer root">
-            <td v-if="!$store.state.isMobileSize">{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
+            <td>{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td v-if="!$store.state.isMobileSize" :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 16px;">my_location</i></td>
             <td v-if="!$store.state.isMobileSize" :class="[getTypeCls()]">{{getTypeName(data.type)}}</td>
@@ -33,12 +33,22 @@
                 </div>
                 <div v-else class="btn" @click="onMode('modifyCooltime')">{{getCooltime(data.gaptimemin)}}</div>                
             </td>
-            <td style="text-align: right;">                
-                <div>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i><i @click="onDeleteCutTime" class="btn mgl-1 material-icons alert" style="font-size: 14px;">delete</i></div>
-            </td>
-            <td v-if="!$store.state.isMobileSize" style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
-            <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
-            <td style="text-align: center;"><CustomBtn bg_confirm @listener="onCut">지금 컷</CustomBtn></td>
+            <template v-if="!$store.state.isMobileSize">
+                <td style="text-align: right;">                
+                    <div>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i><i @click="onDeleteCutTime" class="btn mgl-1 material-icons alert" style="font-size: 14px;">delete</i></div>
+                </td>
+                <td style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
+                <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
+            </template>            
+            <template v-else>
+                <td :class="[getRemainCls(data.remain)]">
+                    <div class="f-col">
+                        <div class="pdh-1">{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" style="color: black;" @click="onMode('modifyCuttime')">create</i><i @click="onDeleteCutTime" class="btn mgl-1 material-icons alert" style="font-size: 14px;">delete</i></div>
+                        <div class="pdh-1">{{getRemainTime(data.remain)}}</div>
+                    </div>
+                </td>
+            </template>
+            <td style="text-align: center;"><CustomBtn bg_confirm @listener="onCut" :st="$store.state.isMobileSize ? '1' : '2'">지금 컷</CustomBtn></td>
             <td class="btn" style="text-align: center;" @click="onFavorite" ><i style="color: black;" class="material-icons">{{data.favorite?'star':'star_border'}}</i></td>
         </tr>    
 </template>
@@ -116,6 +126,8 @@ import { MapData } from '@/js/MapData';
             },
             getRemainCls(remainSec) {
                 if( this.data.cuttime == 0 && remainSec == -1 ) return '';
+
+                if( remainSec <= 0 ) return 'over';
 
                 if( remainSec < 300 ) return 'alert';
             },
@@ -262,7 +274,8 @@ import { MapData } from '@/js/MapData';
 </script>
 
 <style lang="scss" scoped>
-.boss-timer.root td.alert { background-color: $cr-cancel; color: white; }
+.boss-timer.root td.alert { background-color: #F9A825; color: white; }
+.boss-timer.root td.over { background-color: #FFCDD2; color: white; }
 .boss-timer.root:hover { background-color: #B2DFDB; }
 .type-1 { color: blue; }
 .type-2 { color: purple; }

@@ -14,29 +14,42 @@
                 <div class="mgr-3">보스 검색</div>
                 <input class="type-1" type="text" v-model="ipSearchBoss" @keyup="onChangeSearchBoss">
                 <div class="mgw-3">채널</div>
-                <select v-model="selChannel" @change="onChannelChange">
+                <select class="type-1" v-model="selChannel" @change="onChannelChange">
                     <option :key="idx" v-for="(it,idx) in 10" :value="it">{{it}}</option>
                 </select>
                 <div class="mgw-3">지역</div>
-                <select v-model="selArea" @change="onFilterChange">
+                <select class="type-1" v-model="selArea" @change="onFilterChange">
                     <option value="">모두보기</option>
                     <option :key="idx" v-for="(it,idx) in areaList" :value="it">{{it}}</option>
                 </select>
                 <div class="mgw-3">필드</div>
-                <select v-model="selField" @change="onFilterChange">
+                <select class="type-1" v-model="selField" @change="onFilterChange">
                     <option value="">모두보기</option>
                     <option :key="idx" v-for="(it,idx) in fieldList" :value="it">{{it}}</option>
                 </select>
                 <div class="mgw-3">보스</div>
-                <select v-model="selBoss" @change="onFilterChange">
+                <select class="type-1" v-model="selBoss" @change="onFilterChange">
                     <option value="">모두보기</option>
                     <option :key="idx" v-for="(it,idx) in bossList" :value="it">{{it}}</option>
                 </select>
                 <div class="mgw-3">타입</div>
-                <select v-model="selType" @change="onFilterChange">
+                <select class="type-1" v-model="selType" @change="onFilterChange">
                     <option value="">모두보기</option>
                     <option :key="idx" v-for="(it,idx) in typeList" :value="it">{{getTypeName(it)}}</option>
                 </select>
+            </div>
+            <div v-else>
+                <div class="f-row f-ac pdb-2">
+                    <div class="mgr-3">채널</div>
+                    <select class="type-1" v-model="selChannel" @change="onChannelChange">
+                        <option :key="idx" v-for="(it,idx) in 10" :value="it">{{it}}</option>
+                    </select>
+                    <div class="mgw-3">지역</div>
+                    <select class="type-1" v-model="selArea" @change="onFilterChange">
+                        <option value="">모두보기</option>
+                        <option :key="idx" v-for="(it,idx) in areaList" :value="it">{{it}}</option>
+                    </select>
+                </div>
             </div>
             <div v-show="false" class="f-row f-wrap">
                 <div class="pda-1" style="width: 160px;" :key="idx" v-for="(it,idx) in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
