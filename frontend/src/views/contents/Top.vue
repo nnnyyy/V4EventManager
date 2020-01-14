@@ -84,7 +84,7 @@
 
                 if( item.auth_required && this.$store.state.auth ) {
                     if( item.master_only ) {
-                        return  this.$store.state.state === 3;
+                        return  this.$store.state.state === 3 || this.$store.state.state === 4;
                     }
                     else return true;
                 }
