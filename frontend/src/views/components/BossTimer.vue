@@ -6,7 +6,7 @@
                 <td :class="[getAlignCls('bossname')]" style="width: 130px;" class="btn" @click="onAlign('bossname')">보스</td>
                 <td :class="[getAlignCls('bosstype')]" style="width: 150px;" class="btn" @click="onAlign('bosstype')">타입</td>
                 <td style="min-width: 100px;">쿨타임(분)</td>
-                <td style="min-width: 150px;">컷 시간</td>
+                <td style="min-width: 170px;">컷 시간</td>
                 <td style="width: 150px;">예상 젠 시간</td>
                 <td :class="[getAlignCls('remain')]" style="width: 130px;" class="btn" @click="onAlign('remain')">남은 시간</td>
                 <td style="width: 100px;">컷</td>
@@ -23,7 +23,7 @@
         <tr v-else class="boss-timer root">
             <td v-if="!$store.state.isMobileSize">{{data.area_name}} <i v-show="hasAreaData()" @click="onSelectArea" class="btn mgl-1 material-icons">insert_photo</i></td>
             <td v-if="!$store.state.isMobileSize" :class="[getFieldCls()]">{{data.field_name}} <i v-show="hasFieldData()" @click="onSelectField" class="btn mgl-1 material-icons">insert_photo</i></td>
-            <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 14px;">my_location</i></td>
+            <td>{{data.boss_name}} <i v-show="hasBossData()" @click="onSelectBoss" class="btn mgl-1 material-icons" style="font-size: 16px;">my_location</i></td>
             <td v-if="!$store.state.isMobileSize" :class="[getTypeCls()]">{{getTypeName(data.type)}}</td>
             <td v-if="!$store.state.isMobileSize" style="text-align: center;">
                 <div class="f-row" v-if="modifyCooltime">
@@ -33,8 +33,8 @@
                 </div>
                 <div v-else class="btn" @click="onMode('modifyCooltime')">{{getCooltime(data.gaptimemin)}}</div>                
             </td>
-            <td style="text-align: center;">                
-                <div>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i></div>
+            <td style="text-align: right;">                
+                <div>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i><i @click="onDeleteCutTime" class="btn mgl-1 material-icons alert" style="font-size: 14px;">delete</i></div>
             </td>
             <td v-if="!$store.state.isMobileSize" style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
             <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
@@ -234,6 +234,28 @@ import { MapData } from '@/js/MapData';
                 }
 
                 return '';
+            },
+            async onDeleteCutTime() {
+                try {
+                    if( this.$store.state.state < 2 ) {
+                        alert('권한이 없습니다. 길드마스터에게 문의하세요.');
+                        return;
+                    }
+
+                    if(this.data.cuttime == 0) {
+                        alert('삭제할 컷 기록이 없습니다');
+                        return;
+                    }
+
+                    if( !confirm('컷 시간을 삭제하시겠습니까?') ) return;
+
+                    const p = await this.axios.post('/guild/deleteCutTime', {boss_sn: this.data.sn, ch: this.G.getCurrentChannel(this)})
+                    if( p.data.ret != 0 ) throw p.data.ret;
+
+                    this.$emit('onCut');
+                } catch (e) {
+                    alert(e);                    
+                }                
             }
         },
     }

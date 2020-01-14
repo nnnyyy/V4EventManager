@@ -25,3 +25,4 @@ router.post('/guild/kickUser', guild.kickUser);
 router.post('/guild/loadLogs', guild.loadLogs);
 router.post('/guild/secession', guild.secession);
 router.post('/guild/destroy', guild.destroyGuild);
+router.post('/guild/deleteCutTime', guild.deleteCutTime);
