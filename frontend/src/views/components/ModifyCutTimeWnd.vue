@@ -49,6 +49,10 @@
                     let mm = this.G.pad(Number(this.dateModify.mm),2);
 
                     let d = new Date(`${YYYY}-${MM}-${DD} ${HH}:${mm}`);
+                    if( this.G.isIE() ) {
+                        d = new Date(`${YYYY}/${MM}/${DD} ${HH}:${mm}`);
+                    }
+
                     if( d == 'Invalid Date') {
                         this.predictGenTime = d;
                         alert('시간이 잘못 되었습니다');
@@ -75,6 +79,10 @@
                 let mm = this.G.pad(Number(this.dateModify.mm),2); 
 
                 let d = new Date(`${YYYY}-${MM}-${DD} ${HH}:${mm}`);
+                if( this.G.isIE() ) {
+                    d = new Date(`${YYYY}/${MM}/${DD} ${HH}:${mm}`);
+                }
+                
                 if( d == 'Invalid Date') {
                     this.predictGenTime = d;
                     return;
