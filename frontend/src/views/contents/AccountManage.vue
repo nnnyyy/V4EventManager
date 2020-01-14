@@ -8,6 +8,7 @@
                 <select v-model="selList">                    
                     <option value="1">일반 회원</option>
                     <option value="2">컷 가능 회원</option>
+                    <option value="4">매니저</option>
                 </select>
             </div>
             <div>으로</div>
@@ -37,6 +38,7 @@
                 <select v-model="selWaitToJoinGrade">                    
                     <option value="1">일반 회원</option>
                     <option value="2">컷 가능 회원</option>
+                    <option value="4">매니저</option>
                 </select>
             </div>
             <div>으로</div>
@@ -102,6 +104,7 @@
                     case 1: return '일반 회원';
                     case 2: return '컷 가능 회원';
                     case 3: return '길드마스터';
+                    case 4: return '매니져';
                     default: 
                     break;
                 }

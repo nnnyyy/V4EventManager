@@ -252,7 +252,7 @@ exports.changeGrade = async (req, res)=> {
     let conn = null;
     try {
         const userinfo = await GetUserInfo(req);
-        if( userinfo.grade != 3 ) throw -1;
+        if( userinfo.grade != 3 && userinfo.grade != 4 ) throw -1;
 
         const userSNList = req.body.userSNList;
         const grade = req.body.grade;
@@ -284,7 +284,7 @@ exports.kickUser = async (req, res)=> {
     let conn = null;
     try {
         const userinfo = await GetUserInfo(req);
-        if( userinfo.grade != 3 ) throw -1;
+        if( userinfo.grade != 3 && userinfo.grade != 4 ) throw -1;
 
         const userSNList = req.body.userSNList;
 
