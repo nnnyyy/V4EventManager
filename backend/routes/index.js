@@ -26,3 +26,4 @@ router.post('/guild/loadLogs', guild.loadLogs);
 router.post('/guild/secession', guild.secession);
 router.post('/guild/destroy', guild.destroyGuild);
 router.post('/guild/deleteCutTime', guild.deleteCutTime);
+router.post('/guild/setAutoCut', guild.setAutoCut);

@@ -242,7 +242,9 @@ exports.loadGuildMembers = async (req, res)=> {
 
         const p = await db.query(q);
 
-        res.send({ret: 0, list: p.rows});
+        const pGuild = await db.query(`select * from guild where sn = ${userinfo.guild}`);        
+
+        res.send({ret: 0, list: p.rows, autocut: pGuild.rows[0].autocut});
     } catch (e) {
         ErrorProc(res, e);        
     }
@@ -387,6 +389,25 @@ exports.deleteCutTime = async (req, res)=> {
         await db.query(`delete from cuttime where guild_sn = ${guildSN} and boss_sn = ${sn} and channel = ${channel}`);
 
         await _WriteGuildLog(guildSN, userinfo.sn, `채널 ${channel} - ${bossinfo.field_name} 의 ${bossinfo.boss_name} 컷 시간을 삭제 했습니다`);
+
+        res.send({ret: 0 });
+    } catch (e) {
+        ErrorProc(res, e);        
+    }
+}
+
+exports.setAutoCut = async (req,res)=> {
+    try {
+        const userinfo = await GetUserInfo(req);
+
+        if( userinfo.grade <= 2 ) throw -1;
+        
+        const val = req.body.value;
+        const guildSN = userinfo.guild;
+        
+        await db.query(`update guild set autocut = ${val} where sn = ${guildSN}`);
+
+        await _WriteGuildLog(guildSN, userinfo.sn, `오토 컷 설정을 ${val==0 ? 'OFF' : 'ON'} 했습니다`);
 
         res.send({ret: 0 });
     } catch (e) {

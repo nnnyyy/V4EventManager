@@ -55,8 +55,15 @@ class ServerManager {
         return ip;
     }
 
-    update(tCur) {
-        
+    async update(tCur) {
+        if( tCur - this.tLastUpdateAuto >= 5 * 60 * 1000 ) {
+            this.tLastUpdateAuto = tCur;
+            try {
+                await db.query(`update cuttime c join guild g on c.guild_sn = g.sn set cuttime = date_add(cuttime, interval gaptimemin DAY_MINUTE) where ( g.sn <> -1 and guild_sn <> -1 and channel <> -1 and boss_sn <> -1 ) and g.autocut = 1 and date_add(cuttime, interval (gaptimemin + 30) DAY_MINUTE) < now()`);
+            } catch (e) {
+                console.log(e);
+            }            
+        }
     }
 
     initListener(io) {
@@ -67,6 +74,7 @@ class ServerManager {
     initSvrSettings() {
         return new Promise(async (res,rej)=> {
             try {
+                this.tLastUpdateAuto = new Date();
                 res();                
             } catch (e) {
                 rej();

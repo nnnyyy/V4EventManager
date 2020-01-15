@@ -28,6 +28,7 @@ create table guild (
     regdate datetime not null default now(),
     primary key(sn)
 )DEFAULT CHARSET=utf8;
+alter table guild add column autocut int default 0;
 
 insert into guild (master_sn, guildname) values ( 1, '야옹야옹');
 

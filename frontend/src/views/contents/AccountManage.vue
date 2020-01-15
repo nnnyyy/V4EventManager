@@ -63,6 +63,15 @@
                 <div class="table-type-1-fs">승인 대기자가 없습니다</div>
             </div>
         </div>
+        <div class="mgt-4 f-row f-ac">
+            <div class="mgr-4">자동 컷시간 설정</div>
+            <select class="type-1" v-model="selAutoCut" @change="onChangeAutoCut">
+                <option value="1">사용</option>
+                <option value="0">사용안함</option>
+            </select>
+        </div>
+        <div class="mgt-2" style="font-size: 14px;">예상 젠 시간이 30분이상 지난 보스를 대상으로 일정 시간마다 서버에서 체크해서 자동으로 쿨타임만큼 더해줍니다</div>
+
         <div class="mgt-4">
             <CustomBtn bg_cancel st=5 @listener="onDestroyGuild">길드 삭제</CustomBtn>
         </div>
@@ -81,7 +90,8 @@
                 waitToJoinList: [],
                 cbWaitToJoin: [],
                 cbWaitToJoinAll: false,
-                selWaitToJoinGrade: "1"
+                selWaitToJoinGrade: "1",
+                selAutoCut: "0"
             }
         },
         created () {            
@@ -93,6 +103,7 @@
                     const p = await this.axios.post('/guild/loadGuildMembers');
                     this.list = p.data.list.filter(it=>it.grade > 0);
                     this.waitToJoinList = p.data.list.filter(it=>it.grade == 0);
+                    this.selAutoCut = p.data.autocut;
 
                 } catch (e) {
                     alert(e);                    
@@ -171,6 +182,14 @@
                 await this.axios.post('/guild/destroy');
 
                 window.location.href = '/';
+            },
+            async onChangeAutoCut() {
+                try {
+                    const p = await this.axios.post('/guild/setAutoCut', {value: this.selAutoCut});
+                    if( p.data.ret != 0 ) throw p.data.ret;
+                } catch (e) {
+                    alert(e);
+                }
             }
         },        
     }
