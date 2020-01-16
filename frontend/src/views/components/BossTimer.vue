@@ -35,7 +35,7 @@
             </td>
             <template v-if="!$store.state.isMobileSize">
                 <td style="text-align: right;">                
-                    <div>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i><i @click="onDeleteCutTime" class="btn mgl-1 material-icons alert" style="font-size: 14px;">delete</i></div>
+                    <div><span v-if="data.autocutted"><i class="material-icons btn table-type-1-fs  autocut">autorenew</i></span>{{cutTime(data.cuttime)}} <i class="material-icons btn table-type-1-fs" @click="onMode('modifyCuttime')">create</i><i @click="onDeleteCutTime" class="btn mgl-1 material-icons alert" style="font-size: 14px;">delete</i></div>
                 </td>
                 <td style="text-align: center;">{{predictGenTime(data.cuttime, data.gaptimemin)}}</td>
                 <td style="text-align: center;" :class="[getRemainCls(data.remain)]">{{getRemainTime(data.remain)}}</td>
@@ -283,4 +283,6 @@ import { MapData } from '@/js/MapData';
 .boss-timer.root td.aligned::after { content: ' ▼' }
 .boss-timer.root td.aligned-reverse { background-color: $cr-primary-3; }
 .boss-timer.root td.aligned-reverse::after { content: ' ▲' }
+.autocut { position: relative; }
+.autocut:hover::after { position: absolute; left:0; top: -20px; background-color: white; border: 2px solid black; @extend .pda-1; content: '오토컷에 의해 보정됨' }
 </style>

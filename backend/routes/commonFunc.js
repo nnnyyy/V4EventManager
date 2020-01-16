@@ -25,6 +25,7 @@ exports.GetUserInfo = function(req) {
                     sn: req.session.userinfo.sn,
                     guild: userGuildInfo.guild_sn,
                     guildname: userGuildInfo.guildname ? userGuildInfo.guildname : '',
+                    autocut: userGuildInfo.autocut ? userGuildInfo.autocut : 0,
                     nick : nick,
                     grade: userGuildInfo.grade
                 }

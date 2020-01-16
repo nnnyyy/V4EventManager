@@ -37,6 +37,7 @@
                     <option value="">모두보기</option>
                     <option :key="idx" v-for="(it,idx) in typeList" :value="it">{{getTypeName(it)}}</option>
                 </select>
+                <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>
             </div>
             <div v-else>
                 <div class="f-row f-ac pdb-2">
@@ -49,6 +50,7 @@
                         <option value="">모두보기</option>
                         <option :key="idx" v-for="(it,idx) in areaList" :value="it">{{it}}</option>
                     </select>
+                    <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>
                 </div>
             </div>
             <div v-show="false" class="f-row f-wrap">
@@ -135,6 +137,18 @@ let reloadTimeIndex = -1;
                         let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
                         if( remain < 0)  {
                             remain = 0;
+                        }
+
+                        if( this.$store.state.autocut == 1 ) {
+                            let _ct = it.cuttime;
+                            let _gapmin = it.gaptimemin;
+                            let bModify = false;
+                            while(this.$moment(_ct).add(_gapmin + 30, 'minutes').toDate() < Date.now()) {
+                                _ct = this.$moment(_ct).add(_gapmin, 'minutes').toDate();                                                                
+                                bModify = true;
+                            }
+                            it.cuttime = _ct;
+                            if( bModify ) it.autocutted = true;
                         }
                         
                         if( it.remain != 0 && remain == 0 ) {
@@ -423,4 +437,6 @@ let reloadTimeIndex = -1;
 .left { height: calc(#{$lo-bot-height} - 16px); overflow-y: auto; }
 .bossArea { @extend .animate-flicker; position: absolute; padding: 4px 8px; background-color: red; color: white; font-weight: bolder; font-size: 15px; border-radius: 4px; border: 1.5px solid black; }
 .bossArea-point { position: absolute; width: 10px; height: 10px; background-color: blue; }
+.autocut { position: relative; color: blue; font-weight: border; }
+.autocut:hover::after { position: absolute; left: 110%; top: 0px; width: 300px; z-index: 1000; @extend .pda-1; background-color: white; border: 2px solid black; content: '예상 젠시간 + 30분이 현재시간보다 이전 시간일 경우 자동으로 시간 보정 해주는 기능. 관리자가 조작 가능.'}
 </style>

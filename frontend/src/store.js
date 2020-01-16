@@ -10,7 +10,8 @@ export default new Vuex.Store({
     guild: -1, // -1 면 길드가입 안함
     guildname: '',
     nick: '',
-    isMobileSize: false
+    isMobileSize: false,
+    autocut: 0
   },
   mutations: {    
   },

@@ -56,6 +56,7 @@ class ServerManager {
     }
 
     async update(tCur) {
+        /*
         if( tCur - this.tLastUpdateAuto >= 5 * 60 * 1000 ) {
             this.tLastUpdateAuto = tCur;
             try {
@@ -64,6 +65,7 @@ class ServerManager {
                 console.log(e);
             }            
         }
+        */
     }
 
     initListener(io) {
