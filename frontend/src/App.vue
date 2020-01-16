@@ -32,6 +32,8 @@ export default {
           this.$store.state.guildname = userinfo.guildname;
           this.$store.state.nick = userinfo.nick;
           this.$store.state.autocut = userinfo.autocut;
+          this.G.connectTCP();
+          
           if( this.$store.state.guild != -1 && 
               this.$store.state.state == 0 && 
               window.location.pathname != '/JoinGuild' ) {

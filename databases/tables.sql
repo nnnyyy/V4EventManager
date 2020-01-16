@@ -296,4 +296,17 @@ alter table cuttime drop primary key;
 alter table cuttime add primary key(channel, guild_sn, boss_sn);
 
 select b.*, ifnull(c.boss_sn, -1) boss_sn, ifnull(c.cuttime,0) cuttime, ifnull(c.gaptimemin, 0) gaptimemin from boss b left join (select * from cuttime where guild_sn = 1) c on b.sn = c.boss_sn;
-  
+
+
+/* 통계 */
+create database v4eventmanager_statistics;
+
+use v4eventmanager_statistics;
+
+/* 동접 테이블 */
+drop table if exists connectors;
+create table connectors (
+	regdate datetime,
+    conn int,
+    index ix_regdate(regdate)
+) DEFAULT CHARSET=utf8;

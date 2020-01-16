@@ -5,7 +5,7 @@ class GlobalVariables {
 
     connectTCP() {
         /* eslint-disable */
-        this.socket = io();
+        this.socket = io({autoConnect: true});
         /* eslint-enable */
     }
 
