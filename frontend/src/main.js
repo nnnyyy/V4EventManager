@@ -4,8 +4,8 @@ import './plugins/axios'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import G from './globalvariables'
 import 'expose-loader?$!expose-loader?jQuery!jquery'
+import GlobalVariables from './globalvariables';
 
 import CustomBtn from './views/components/CustomBtn'
 import PermanentWnd from './views/components/PermanentWnd'
@@ -26,6 +26,8 @@ import PageBaseGuildMemberOnly from './views/components/PageBaseGuildMemberOnly'
 Vue.component('PageBaseGuildMemberOnly', PageBaseGuildMemberOnly);
 import PageBaseNoGuildOnly from './views/components/PageBaseNoGuildOnly'
 Vue.component('PageBaseNoGuildOnly', PageBaseNoGuildOnly);
+import PageBaseAdminOnly from './views/components/PageBaseAdminOnly'
+Vue.component('PageBaseAdminOnly', PageBaseAdminOnly);
 import NeedLogin from './views/components/NeedLogin'
 Vue.component('NeedLogin', NeedLogin);
 
@@ -42,7 +44,7 @@ Vue.use(Datetime);
 //Vue.use( CKEditor );
 
 Vue.prototype.$EventBus = new Vue();
-Vue.prototype.G = G;
+Vue.prototype.G = new GlobalVariables(Vue.prototype.$EventBus);;
 
 new Vue({
   router,

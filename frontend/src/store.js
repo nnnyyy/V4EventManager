@@ -11,7 +11,8 @@ export default new Vuex.Store({
     guildname: '',
     nick: '',
     isMobileSize: false,
-    autocut: 0
+    autocut: 0,
+    plv: 0
   },
   mutations: {    
   },

@@ -18,8 +18,9 @@ exports.GetUserInfo = function(req) {
                 if( pUserGuild.rows.length <= 0 ) throw -2;
                 const userGuildInfo = pUserGuild.rows[0];
 
-                const pUser = await db.query(`select nick from account where sn = ${req.session.userinfo.sn}`);
+                const pUser = await db.query(`select nick, permission_level from account where sn = ${req.session.userinfo.sn}`);
                 const nick = pUser.rows[0].nick;
+                const plv = pUser.rows[0].permission_level;
 
                 let info = {
                     sn: req.session.userinfo.sn,
@@ -27,6 +28,7 @@ exports.GetUserInfo = function(req) {
                     guildname: userGuildInfo.guildname ? userGuildInfo.guildname : '',
                     autocut: userGuildInfo.autocut ? userGuildInfo.autocut : 0,
                     nick : nick,
+                    plv: plv,
                     grade: userGuildInfo.grade
                 }
                 res(info);                

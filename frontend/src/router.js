@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import MainRoot from './views/contents/MainRoot'
 import GuildLog from './views/contents/GuildLog'
+import Admin from './views/contents/Admin'
 
 Vue.use(Router)
 
@@ -19,6 +20,7 @@ export default new Router({
         { path: 'Login', name: '', component: ()=> import('./views/contents/Login')},
         { path: 'SignUp', name: '', component: ()=> import('./views/contents/SignUp')},
         { path: 'GuildLog', name: '', component: GuildLog },
+        { path: 'admin', name: '', component: Admin },
       ]
     },
     {

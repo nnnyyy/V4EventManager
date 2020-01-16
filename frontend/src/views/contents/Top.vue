@@ -33,6 +33,7 @@
                 <template v-if="$store.state.auth && $store.state.guild != -1 && ( $store.state.state < 3  && $store.state.state > 0 )">
                     <div class="item"><CustomBtn bg_cancel @listener="onSecession">길드 탈퇴하기</CustomBtn></div>
                 </template>
+                <div v-if="$store.state.plv == 1" class="item"><CustomBtn bg_cancel @listener="onAdmin">어드민 명령</CustomBtn></div>
             </div>
         </template>        
     </div>
@@ -95,7 +96,10 @@
                 window.location.href = '/';
             },
             isGuildMember() {      
-            return this.$store.state.auth && this.$store.state.guild!=-1 && this.$store.state.state >= 1;
+                return this.$store.state.auth && this.$store.state.guild!=-1 && this.$store.state.state >= 1;
+            },
+            onAdmin() {
+                window.location.href = '/admin';
             }
         },
         created () {            

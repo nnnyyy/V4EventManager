@@ -1,6 +1,7 @@
 const Logger = require('../Components/Logger');
 const UserInfo = require('./User');
 const db = require('../Lib/MYSQL');
+const GuildManager = require('./GuildManager');
 
 class ServerManager {
     constructor() {        
@@ -25,13 +26,22 @@ class ServerManager {
         })        
     }
 
-    connUser(sock) {
+    async connUser(sock) {
         try {
             const userinfo = sock.handshake.session.userinfo;
             if( !userinfo ) throw -1;
 
+            const pUser = await db.query(`select nick, permission_level from account where sn = ${userinfo.sn}`);
+            const plv = pUser.rows[0].permission_level;
+
+            if( plv == 1 ) {
+                sock.join('admin');
+            }
+
             const newConnUser = new UserInfo(sock, userinfo);
             this.mUsers.set(userinfo.sn, newConnUser);
+
+            this.guildMan.add(newConnUser);
 
             sock.on('disconnect', ()=>{ this.disconnUser(sock, userinfo.sn) });
 
@@ -42,7 +52,12 @@ class ServerManager {
 
     disconnUser(sock, id) {
         try {
-            if( this.mUsers.has(id) ) this.mUsers.delete(id);
+            if( this.mUsers.has(id) ) {
+                const user = this.mUsers.get(id);
+                
+                this.guildMan.remove(user);
+                this.mUsers.delete(id)
+            };
         } catch (e) {
             Logger.error(`wrong disconnect ( ip: ${this.getIP(sock)} )`);
         }
@@ -57,6 +72,11 @@ class ServerManager {
     }
 
     async update(tCur) {
+        if( tCur - this.tLastAdmin >= 1 * 1000 ) {
+            this.tLastAdmin = tCur;
+            this.io.to('admin').emit('guildinfo', this.guildMan.getGuildInfo());
+        }
+
         if( tCur - this.tLastUpdateAuto >= 10 * 60 * 1000 ) {
             this.tLastUpdateAuto = tCur;
             try {
@@ -75,7 +95,9 @@ class ServerManager {
     initSvrSettings() {
         return new Promise(async (res,rej)=> {
             try {
+                this.guildMan = new GuildManager(this);
                 this.tLastUpdateAuto = 0;
+                this.tLastAdmin = 0;
                 res();                
             } catch (e) {
                 rej();

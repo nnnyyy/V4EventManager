@@ -1,11 +1,15 @@
 class GlobalVariables {
-    constructor() {
+    constructor(ebus) {
         this.initAds();
+        this.ebus = ebus;
     }
 
     connectTCP() {
         /* eslint-disable */
         this.socket = io({autoConnect: true});
+        this.socket.on('guildinfo', packet=> {
+            this.ebus.$emit('guildinfo', packet);
+        })
         /* eslint-enable */
     }
 
@@ -121,6 +125,4 @@ class GlobalVariables {
     }
 }
 
-const _obj = new GlobalVariables();
-
-export default _obj;
+export default GlobalVariables;
