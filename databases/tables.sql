@@ -273,6 +273,9 @@ insert into boss ( dimention_name, area_name, field_group, field_name, boss_name
 insert into boss ( dimention_name, area_name, field_group, field_name, boss_name, type, term ) values ('실루나스', '데커스화산', '용해 위험지대', '용해 위험지대', '파이우스', 2, 180);
 insert into boss ( dimention_name, area_name, field_group, field_name, boss_name, type, term ) values ('실루나스', '데커스화산', '데커스 용암지대', '데커스 용암지대', '호바른', 2, 180);
 insert into boss ( dimention_name, area_name, field_group, field_name, boss_name, type, term ) values ('루나트라', '허상의고원', '허상 요새', '허상 요새', '페리라', 1, 0);
+insert into boss ( dimention_name, area_name, field_group, field_name, boss_name, type, term ) values ('몽환의틈', '상인의소원1', '기만의궁전', '기만의궁전', '시련황금카셀', 2, 0);
+insert into boss ( dimention_name, area_name, field_group, field_name, boss_name, type, term ) values ('몽환의틈', '상인의소원1', '희망 바닷길', '희망 바닷길', '시련황금카셀', 2, 0);
+insert into boss ( dimention_name, area_name, field_group, field_name, boss_name, type, term ) values ('몽환의틈', '상인의소원1', '졸부 바윗길', '졸부 바윗길', '시련황금카셀', 2, 0);
 
 drop table if exists cuttime;
 create table cuttime (
