@@ -7,7 +7,7 @@ class GuildManager {
     }
 
     async add(user) {
-        if( user.info.guild == -1 ) return;
+        if( !user.info.guild || user.info.guild == -1 ) return;
 
         if( !this.mGuild.has(user.info.guild) ) {
             const mGuildUser = new Map();
