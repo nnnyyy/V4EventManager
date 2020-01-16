@@ -59,6 +59,8 @@ exports.login = async (req,res) => {
 
         await saveUserInfo(req, {sn: accountInfo.sn, grade: userGuildInfo.grade, guild: userGuildInfo.guild_sn});
 
+        await db.query(`update account set lastLogined = now() where sn = ${accountInfo.sn}`);
+
         res.send({ret: 0});
     } catch (e) {
         ErrorProc(res, e);        

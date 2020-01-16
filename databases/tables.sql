@@ -12,6 +12,8 @@ create table account (
     primary key(sn)
 ) DEFAULT CHARSET=utf8;
 
+alter table account add column lastLogined datetime default now();
+
 drop table if exists user_guild;
 create table user_guild (
 	user_sn int not null,
