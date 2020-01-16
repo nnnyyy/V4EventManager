@@ -1,4 +1,5 @@
 const db = require('../Lib/MYSQL');
+const GetUserInfo2 = require('../routes/commonFunc').GetUserInfo2;
 
 class GuildManager {
     constructor(sm) {
@@ -7,18 +8,24 @@ class GuildManager {
     }
 
     async add(user) {
-        if( !user.info.guild || user.info.guild == -1 ) return;
+        try {
+            if( user.info.guild == -1 ) return;
 
-        if( !this.mGuild.has(user.info.guild) ) {
-            const mGuildUser = new Map();
-            const pGuild = await db.query(`select * from guild where sn = ${user.info.guild}`);
-            if( pGuild.rows.length <= 0 ) return;
+            const userinfo = await GetUserInfo2(user.sock.handshake.session);
 
-            mGuildUser.set(user.info.sn, user);
-            this.mGuild.set(user.info.guild, {info: pGuild.rows[0], users: mGuildUser} );
-        }
-        else {
-            this.mGuild.get(user.info.guild).users.set(user.info.sn, user);
+            if( !this.mGuild.has(userinfo.guild) ) {
+                const mGuildUser = new Map();
+                const pGuild = await db.query(`select * from guild where sn = ${userinfo.guild}`);
+                if( pGuild.rows.length <= 0 ) return;
+
+                mGuildUser.set(user.info.sn, user);
+                this.mGuild.set(userinfo.guild, {info: pGuild.rows[0], users: mGuildUser} );
+            }
+            else {
+                this.mGuild.get(userinfo.guild).users.set(user.info.sn, user);
+            }            
+        } catch (e) {
+            console.log(e);            
         }
     }
 
