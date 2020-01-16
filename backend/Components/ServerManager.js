@@ -33,7 +33,7 @@ class ServerManager {
             const newConnUser = new UserInfo(sock, userinfo);
             this.mUsers.set(userinfo.sn, newConnUser);
 
-            sock.on('disconnect', ()=>{ this.disconnUser(sock, userinfo.id) });
+            sock.on('disconnect', ()=>{ this.disconnUser(sock, userinfo.sn) });
 
         } catch (e) {            
             Logger.error(`wrong connection ( ip: ${this.getIP(sock)} )`);
