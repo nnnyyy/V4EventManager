@@ -31,7 +31,7 @@ class ServerManager {
             if( !userinfo ) throw -1;
 
             const newConnUser = new UserInfo(sock, userinfo);
-            this.mUsers.set(userinfo.id, newConnUser);
+            this.mUsers.set(userinfo.sn, newConnUser);
 
             sock.on('disconnect', ()=>{ this.disconnUser(sock, userinfo.id) });
 
