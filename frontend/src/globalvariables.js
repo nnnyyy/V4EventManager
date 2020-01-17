@@ -59,6 +59,7 @@ class GlobalVariables {
     }
 
     isIE() {
+        /* eslint-disable */
         var ua = window.navigator.userAgent;
         var msie = ua.indexOf("MSIE ");
 
@@ -71,6 +72,7 @@ class GlobalVariables {
         {
             //alert('otherbrowser');
         }
+        /* eslint-enable */
 
         return false;
     }

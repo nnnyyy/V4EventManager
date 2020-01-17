@@ -44,7 +44,7 @@ Vue.use(Datetime);
 //Vue.use( CKEditor );
 
 Vue.prototype.$EventBus = new Vue();
-Vue.prototype.G = new GlobalVariables(Vue.prototype.$EventBus);;
+Vue.prototype.G = new GlobalVariables(Vue.prototype.$EventBus);
 
 new Vue({
   router,

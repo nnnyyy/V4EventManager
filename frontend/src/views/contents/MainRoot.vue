@@ -137,11 +137,6 @@ let reloadTimeIndex = -1;
                 this.list.forEach(async it=> {                    
                     if( it.cuttime == 0 ) it.remain = -1;
                     else {
-                        let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
-                        if( remain < 0)  {
-                            remain = 0;
-                        }
-
                         if( this.$store.state.autocut == 1 ) {
                             let _ct = it.cuttime;
                             let _gapmin = it.gaptimemin;
@@ -153,6 +148,11 @@ let reloadTimeIndex = -1;
                             it.cuttime = _ct;
                             if( bModify ) it.autocutted = true;
                         }
+                        
+                        let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
+                        if( remain < 0)  {
+                            remain = 0;
+                        }                        
                         
                         if( it.remain != 0 && remain == 0 ) {
                             /*
@@ -201,10 +201,6 @@ let reloadTimeIndex = -1;
                         
                         if( it.cuttime == 0 ) it.remain = -1;
                         else {
-                            let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
-                            if( remain < 0) remain = 0;
-                            it.remain = remain;
-
                             if( this.$store.state.autocut == 1 ) {
                                 let _ct = it.cuttime;
                                 let _gapmin = it.gaptimemin;
@@ -216,6 +212,10 @@ let reloadTimeIndex = -1;
                                 it.cuttime = _ct;
                                 if( bModify ) it.autocutted = true;
                             }
+
+                            let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
+                            if( remain < 0) remain = 0;
+                            it.remain = remain;                            
                         }
                     });
 
