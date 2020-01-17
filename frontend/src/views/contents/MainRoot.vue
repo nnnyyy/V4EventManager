@@ -224,15 +224,15 @@ let reloadTimeIndex = -1;
                     this.bossList = Array.from(stBoss.keys());
                     this.typeList = Array.from(stType.keys());
 
+                    this.onChangeSearchBoss();
+                        
+                    this.list = p.data.list;
+                    
+                    const alignState = this.G.getAlignState();                        
+
+                    this.onFilterChange();
+
                     this.$nextTick(()=>{
-                        this.onChangeSearchBoss();
-                        
-                        this.list = p.data.list;
-                        
-                        const alignState = this.G.getAlignState();                        
-
-                        this.onFilterChange();
-
                         this.onAlign(alignState);
                     });                    
 
