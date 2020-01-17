@@ -9,7 +9,7 @@ class GuildManager {
 
     async add(user) {
         try {
-            if( user.info.guild == -1 ) return;
+            if( !user.info.guild || user.info.guild == -1 ) return;
 
             const userinfo = await GetUserInfo2(user.sock.handshake.session);
 
@@ -18,11 +18,11 @@ class GuildManager {
                 const pGuild = await db.query(`select * from guild where sn = ${userinfo.guild}`);
                 if( pGuild.rows.length <= 0 ) return;
 
-                mGuildUser.set(user.info.sn, user);
+                mGuildUser.set(user.info.sn, user.info);
                 this.mGuild.set(userinfo.guild, {info: pGuild.rows[0], users: mGuildUser} );
             }
             else {
-                this.mGuild.get(userinfo.guild).users.set(user.info.sn, user);
+                this.mGuild.get(userinfo.guild).users.set(user.info.sn, user.info);
             }            
         } catch (e) {
             console.log(e);            
@@ -45,6 +45,15 @@ class GuildManager {
         }
 
         return list;
+    }
+
+    getUserGuildInfo(user) {
+        if( !user.info.guild || user.info.guild == -1 ) return;
+
+        const guild = this.mGuild.get(user.info.guild);
+        const info = guild.info;
+        const userlist = Array.from(guild.users.values());
+        return {info: info, list: userlist};
     }
 }
 

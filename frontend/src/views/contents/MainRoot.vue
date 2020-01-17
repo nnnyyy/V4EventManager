@@ -38,6 +38,7 @@
                     <option :key="idx" v-for="(it,idx) in typeList" :value="it">{{getTypeName(it)}}</option>
                 </select>
                 <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>
+                <div>{{guildinfo ? guildinfo.list.length : 0}} 명 접속중</div>
             </div>
             <div v-else>
                 <div class="f-row f-ac pdb-2">
@@ -50,7 +51,7 @@
                         <option value="">모두보기</option>
                         <option :key="idx" v-for="(it,idx) in areaList" :value="it">{{it}}</option>
                     </select>
-                    <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>
+                    <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>                    
                 </div>
             </div>
             <div v-show="false" class="f-row f-wrap">
@@ -103,7 +104,8 @@ let reloadTimeIndex = -1;
                 selField: '',
                 selBoss: '',
                 selType: '',
-                selChannel: '1'
+                selChannel: '1',
+                guildinfo: null
             }
         },
         beforeCreate() {
@@ -126,6 +128,7 @@ let reloadTimeIndex = -1;
                 else this.$store.state.isMobileSize = false;
             }
             this.$EventBus.$on('modifyCutComplete', ()=>this.loadEvent());
+            this.$EventBus.$on('guildConnInfo', info=>this.guildinfo=info);
         },
         mounted() {
         },
@@ -201,6 +204,18 @@ let reloadTimeIndex = -1;
                             let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
                             if( remain < 0) remain = 0;
                             it.remain = remain;
+
+                            if( this.$store.state.autocut == 1 ) {
+                                let _ct = it.cuttime;
+                                let _gapmin = it.gaptimemin;
+                                let bModify = false;
+                                while(this.$moment(_ct).add(_gapmin + 30, 'minutes').toDate() < Date.now()) {
+                                    _ct = this.$moment(_ct).add(_gapmin, 'minutes').toDate();                                                                
+                                    bModify = true;
+                                }
+                                it.cuttime = _ct;
+                                if( bModify ) it.autocutted = true;
+                            }
                         }
                     });
 

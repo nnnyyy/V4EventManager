@@ -77,6 +77,14 @@ class ServerManager {
             this.io.to('admin').emit('guildinfo', this.guildMan.getGuildInfo());
         }
 
+        if( tCur - this.tLastGuildInfo >= 5 * 1000 ) {
+            this.tLastGuildInfo = tCur;
+            this.mUsers.forEach(user=>{
+                const guildinfo = this.guildMan.getUserGuildInfo(user);
+                this.sendPacket(user.sock, 'guildConnInfo', guildinfo);
+            })
+        }
+
         if( tCur - this.tLastUpdateAuto >= 10 * 60 * 1000 ) {
             this.tLastUpdateAuto = tCur;
             try {
@@ -98,12 +106,17 @@ class ServerManager {
                 this.guildMan = new GuildManager(this);
                 this.tLastUpdateAuto = 0;
                 this.tLastAdmin = 0;
+                this.tLastGuildInfo = 0;
                 res();                
             } catch (e) {
                 rej();
             }
         })                
-    }    
+    }
+
+    sendPacket( sock, event, packet ) {
+        sock.emit(event, packet);
+    }
 }
 
 const _obj = new ServerManager();

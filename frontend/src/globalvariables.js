@@ -7,9 +7,8 @@ class GlobalVariables {
     connectTCP() {
         /* eslint-disable */
         this.socket = io({autoConnect: true});
-        this.socket.on('guildinfo', packet=> {
-            this.ebus.$emit('guildinfo', packet);
-        })
+        this.socket.on('guildinfo', packet=> { this.ebus.$emit('guildinfo', packet); });
+        this.socket.on('guildConnInfo', packet=> { this.ebus.$emit('guildConnInfo', packet); });
         /* eslint-enable */
     }
 
