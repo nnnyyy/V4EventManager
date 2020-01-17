@@ -1,7 +1,8 @@
 <template>
 <PageBaseAdminOnly>
     <div class="pda-4">        
-        관리 페이지
+        <div class="mgh-2 fsize-title">관리페이지</div>
+        <div class="mgh-2">총 접속 유저 : {{this.users}}</div>
         <table class="type-1" style="max-width: 400px;">
             <tr class="top">
                 <td>길드명</td>
@@ -20,13 +21,15 @@
     export default {
         data() {
             return {
-                list: []                
+                list: [],
+                users: 0
             }
         },
         created () {
             this.$EventBus.$on('guildinfo', p=> {                
                 this.list = [];
                 this.list = p.sort((a,b)=>{return b.users - a.users})
+                this.users = this.list.reduce((acc,val)=> acc + val.users, 0);
             });
         },
         methods: {
