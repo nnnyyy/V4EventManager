@@ -134,6 +134,7 @@ let reloadTimeIndex = -1;
         },
         methods: {
             update() {
+                let bModifyAtLeastOne = false;
                 this.list.forEach(async it=> {                    
                     if( it.cuttime == 0 ) it.remain = -1;
                     else {
@@ -148,7 +149,10 @@ let reloadTimeIndex = -1;
                                 limit--;
                             }
                             it.cuttime = _ct;
-                            if( bModify ) it.autocutted = true;
+                            if( bModify )  {
+                                it.autocutted = true;
+                                bModifyAtLeastOne = true;
+                            }
                         }
                         
                         let remain = Math.floor((this.$moment(it.cuttime).add(it.gaptimemin, 'minutes').toDate() - Date.now()) / 1000);
@@ -168,6 +172,10 @@ let reloadTimeIndex = -1;
                         it.remain = remain;
                     }
                 })
+
+                if( bModifyAtLeastOne ) {
+                    this.onAlign();
+                }
             },
             async loadEvent() {
                 try {
