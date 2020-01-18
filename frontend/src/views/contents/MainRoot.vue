@@ -141,9 +141,11 @@ let reloadTimeIndex = -1;
                             let _ct = it.cuttime;
                             let _gapmin = it.gaptimemin;
                             let bModify = false;
-                            while(this.$moment(_ct).add(_gapmin + 30, 'minutes').toDate() < Date.now()) {
+                            let limit = 5;
+                            while(this.$moment(_ct).add(_gapmin + 30, 'minutes').toDate() < Date.now() && limit > 0) {
                                 _ct = this.$moment(_ct).add(_gapmin, 'minutes').toDate();                                                                
                                 bModify = true;
+                                limit--;
                             }
                             it.cuttime = _ct;
                             if( bModify ) it.autocutted = true;
@@ -205,9 +207,11 @@ let reloadTimeIndex = -1;
                                 let _ct = it.cuttime;
                                 let _gapmin = it.gaptimemin;
                                 let bModify = false;
-                                while(this.$moment(_ct).add(_gapmin + 30, 'minutes').toDate() < Date.now()) {
+                                let limit = 5;
+                                while(this.$moment(_ct).add(_gapmin + 30, 'minutes').toDate() < Date.now() && limit > 5) {
                                     _ct = this.$moment(_ct).add(_gapmin, 'minutes').toDate();                                                                
                                     bModify = true;
+                                    limit--;
                                 }
                                 it.cuttime = _ct;
                                 if( bModify ) it.autocutted = true;

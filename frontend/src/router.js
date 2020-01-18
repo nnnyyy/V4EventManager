@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import MainRoot from './views/contents/MainRoot'
 import GuildLog from './views/contents/GuildLog'
 import Admin from './views/contents/Admin'
+import UpgradeWeapons from './views/contents/UpgradeWeapons'
 
 Vue.use(Router)
 
@@ -21,6 +22,7 @@ export default new Router({
         { path: 'SignUp', name: '', component: ()=> import('./views/contents/SignUp')},
         { path: 'GuildLog', name: '', component: GuildLog },
         { path: 'admin', name: '', component: Admin },
+        { path: 'upgradeWeapons', name: '', component: UpgradeWeapons },
       ]
     },
     {
