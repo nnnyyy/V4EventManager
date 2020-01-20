@@ -56,9 +56,9 @@ class ServerManager {
                 const user = this.mUsers.get(id);
                 
                 this.guildMan.remove(user);
-                this.mUsers.delete(id);
-                this.mSockets.delete(sock.id);
+                this.mUsers.delete(id);                
             };
+            this.mSockets.delete(sock.id);
         } catch (e) {
             Logger.error(`wrong disconnect ( ip: ${this.getIP(sock)} )`);
         }
