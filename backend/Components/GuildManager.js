@@ -51,6 +51,8 @@ class GuildManager {
         if( !user.info.guild || user.info.guild == -1 ) return;
 
         const guild = this.mGuild.get(user.info.guild);
+        if( !guild ) return;
+        
         const info = guild.info;
         const userlist = Array.from(guild.users.values());
         return {info: info, list: userlist};
