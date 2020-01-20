@@ -2,7 +2,8 @@
 <PageBaseAdminOnly>
     <div class="pda-4">        
         <div class="mgh-2 fsize-title">관리페이지</div>
-        <div class="mgh-2">총 접속 유저 : {{this.users}}</div>
+        <div class="mgh-2">총 접속 유저 : {{users}}</div>
+        <div class="mgh-2">총 소켓 : {{socketCnt}}</div>
         <table class="type-1" style="max-width: 400px;">
             <tr class="top">
                 <td>길드명</td>
@@ -22,14 +23,16 @@
         data() {
             return {
                 list: [],
-                users: 0
+                users: 0,
+                socketCnt: 0
             }
         },
         created () {
             this.$EventBus.$on('guildinfo', p=> {                
                 this.list = [];
-                this.list = p.sort((a,b)=>{return b.users - a.users})
+                this.list = p.info.sort((a,b)=>{return b.users - a.users})
                 this.users = this.list.reduce((acc,val)=> acc + val.users, 0);
+                this.socketCnt = p.sockCnt;
             });
         },
         methods: {

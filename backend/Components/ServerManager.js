@@ -10,9 +10,8 @@ class ServerManager {
     init(io) {
         return new Promise( async (res,rej)=> {
             try {
-                await this.initSvrSettings();
+                await this.initSvrSettings();                
                 
-                this.mUsers = new Map();
                 this.io = io;
                 this.io.on('connection', sock=> { this.connUser(sock) });                
 
@@ -40,6 +39,7 @@ class ServerManager {
 
             const newConnUser = new UserInfo(sock, userinfo);
             this.mUsers.set(userinfo.sn, newConnUser);
+            this.mSockets.set(sock.id);
 
             this.guildMan.add(newConnUser);
 
@@ -56,7 +56,8 @@ class ServerManager {
                 const user = this.mUsers.get(id);
                 
                 this.guildMan.remove(user);
-                this.mUsers.delete(id)
+                this.mUsers.delete(id);
+                this.mSockets.delete(sock.id);
             };
         } catch (e) {
             Logger.error(`wrong disconnect ( ip: ${this.getIP(sock)} )`);
@@ -74,7 +75,7 @@ class ServerManager {
     async update(tCur) {
         if( tCur - this.tLastAdmin >= 1 * 1000 ) {
             this.tLastAdmin = tCur;
-            this.io.to('admin').emit('guildinfo', this.guildMan.getGuildInfo());
+            this.io.to('admin').emit('guildinfo', {info: this.guildMan.getGuildInfo(), sockCnt: this.mSockets.size });
         }
 
         if( tCur - this.tLastGuildInfo >= 5 * 1000 ) {
@@ -103,6 +104,8 @@ class ServerManager {
     initSvrSettings() {
         return new Promise(async (res,rej)=> {
             try {
+                this.mUsers = new Map();
+                this.mSockets = new Map();
                 this.guildMan = new GuildManager(this);
                 this.tLastUpdateAuto = 0;
                 this.tLastAdmin = 0;
