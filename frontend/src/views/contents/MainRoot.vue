@@ -8,8 +8,8 @@
                 <div v-if="bossData" class="bossArea-point" :style="getBossDataStyle(bossData)"></div>             
             </div>
         </PermanentWnd>
-        <ModifyCutTimeWnd/>
-        <div class="left pda-4" style="flex: auto;">
+        <ModifyCutTimeWnd/>        
+        <div class="left pda-4" style="flex: auto;">            
             <div v-if="!$store.state.isMobileSize" class="f-row f-ac pdb-2">
                 <div class="mgr-3">보스 검색</div>
                 <input class="type-1" type="text" v-model="ipSearchBoss" @keyup="onChangeSearchBoss">
@@ -53,6 +53,12 @@
                     </select>
                     <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>                    
                 </div>
+            </div>
+            <div v-if="!$store.state.isMobileSize" class="mgh-2 ads s728x90">
+                <adfit :info="G.adfitAds728x90[0]"/>
+            </div>
+            <div v-else class="mgh-1 ads s320x100">
+                <adfit :info="G.adfitAds320x100[0]"/>
             </div>
             <div v-show="false" class="f-row f-wrap">
                 <div class="pda-1" style="width: 160px;" :key="idx" v-for="(it,idx) in filter_field"><input type="checkbox" v-model="it.check" @change="onChangeFieldFilter">{{it.name}}</div>
