@@ -54,9 +54,19 @@
                     <div v-if="$store.state.autocut==1" class="mgw-3 autocut table-type-1-fs">오토컷 동작중</div>                    
                 </div>
             </div>
-            <div v-if="!$store.state.isMobileSize" class="mgh-2 ads s728x90">
-                <adfit :info="G.adfitAds728x90[0]"/>
-            </div>
+            <div v-if="!$store.state.isMobileSize" class="mgh-2 f-row f-ac">
+                <div class="ads s728x90 mgr-2">
+                    <adfit :info="G.adfitAds728x90[0]"/>                    
+                </div>
+                <div class="ads s320x100">
+                    <adsense
+                    adClient="ca-pub-3598320494828213"
+                    :adSlot="G.adsense320x100[0].adSlot"
+                    :adStyle="G.adsense320x100[0].adStyle"            
+                    :fullWidthResponsive="G.adsense320x100[0].fullWidthResponsive"
+                    /> 
+                </div>
+            </div>            
             <div v-else class="mgh-1 ads s320x100">
                 <adfit :info="G.adfitAds320x100[0]"/>
             </div>
